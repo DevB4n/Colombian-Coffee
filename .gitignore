@@ -1,0 +1,48 @@
+# Composer
+vendor/
+composer.lock
+
+# Entorno
+.env
+.env.local
+.env.*.local
+
+# Archivos temporales y cachés
+*.log
+*.cache
+*.tmp
+*.temp
+*.bak
+
+# IDEs y editores
+.idea/
+*.sublime-project
+*.sublime-workspace
+.vscode/
+*.swp
+*.swo
+
+# Sistemas de archivos (macOS / Linux / Windows)
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# PHPUnit / Testing
+phpunit.xml
+phpunit.result.cache
+coverage/
+
+# Logs
+logs/
+*.log
+
+# Base de datos (si usas SQLite local)
+*.sqlite
+*.sqlite3
+*.db
+
+# Eloquent migration backups (si los generas manualmente)
+*_backup.sql
+
+# Slim built-in server router (si lo usas)
+router.php
