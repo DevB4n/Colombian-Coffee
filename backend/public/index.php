@@ -1,16 +1,18 @@
 <?php
 
-use Dotenv\Dotenv;
-use App\infraestructure\database\Connection;
+use Slim\App;
+use App\middleware\JsonBodyParserMiddleware;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Server\RequestHandlerInterface as Handler;
 
+return function(App $app) {
 
-require __DIR__ . '/../vendor/autoload.php';
+    $app->add(function(Request $req, Handler $han): Response {
+        $response = $han->handle($req);
+        return $response->withHeader('Content-Type', 'application/json');
+    });
 
-$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
-$dotenv->load();
-
-$connection = Connection::init();
-
-if ($connection !== true){
-    die($connection);
-}
+    // Custom Global Middleware
+    $app->add(new JsonBodyParserMiddleware());
+};

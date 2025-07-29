@@ -15,6 +15,11 @@ class CoffeeController
     {
         $useCase = new GetAllCoffee($this->repo);
         $coffee= $useCase->execute();
+
+        if(!$coffee) {
+            $response->getBody()->write(json_encode(["error" => "No hay datos registrados"]));
+            return $response->withStatus(404);
+        }
         $response->getBody()->write(json_encode($coffee));
 
         return $response;

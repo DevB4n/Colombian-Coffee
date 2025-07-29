@@ -23,7 +23,7 @@ class Connection {
             'password' => $_ENV['DB_PASSWORD'],
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
-            'prefix' => '',
+            'prefix' => ''
         ]);
         $capsule->setAsGlobal();
         $capsule->bootEloquent();
