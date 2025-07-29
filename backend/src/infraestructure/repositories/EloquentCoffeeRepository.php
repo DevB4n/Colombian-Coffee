@@ -1,6 +1,6 @@
 <?php
 
-namespace App\infrastructure\repositories;
+namespace App\infraestructure\repositories;
 
 use App\domain\models\Coffee;
 use App\domain\repositories\CoffeeRepositoryInterface;

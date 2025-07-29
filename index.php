@@ -9,7 +9,7 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\Interfaces\ErrorHandlerInterface;
 
 // Variables de .env
-$dotenv = Dotenv::createImmutable(__DIR__. '/');
+$dotenv = Dotenv::createImmutable(__DIR__ . '/');
 $dotenv->load(); // $_ENV[...]
 
 // Se carga el Container de PHP-DI

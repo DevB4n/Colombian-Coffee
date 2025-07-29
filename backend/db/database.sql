@@ -1,12 +1,12 @@
--- Active: 1753786602013@@127.0.0.1@3306@coffee
+-- Active: 1753812554787@@127.0.0.1@3306@coffee_kawaii
 
 -- Datase connection
 
 SHOW DATABASES;
 
-CREATE DATABASE IF NOT EXISTS coffee_kawaii;
+CREATE DATABASE IF NOT EXISTS coffee;
 
-USE coffee_kawaii
+USE coffee
 
 SHOW TABLES;
 
@@ -177,7 +177,6 @@ VALUES
 ('Antioquia', 'Templado humedo', 'Franco arcilloso', 1),
 ('Huila', 'Templado seco', 'Volcanico', 1),
 ('Caldas', 'Templado humedo', 'Franco arenoso', 1);
-
 
 INSERT INTO plantas_cafe (nombre_variedad, especie, nombre_comun, color_hoja, tamano_hoja_cm, descripcion)
 VALUES 

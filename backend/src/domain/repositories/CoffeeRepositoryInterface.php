@@ -8,6 +8,5 @@ interface CoffeeRepositoryInterface {
 
     public function getAll(): array;
     
-
     public function getByPropertie(string $propertie, mixed $value): ?Coffee;
 }
