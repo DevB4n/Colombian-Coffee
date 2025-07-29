@@ -1,0 +1,19 @@
+{
+    "name": "api/basic",
+    "description": "Api sobre cafes colombianos",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "App\\": "backend/src/"
+        }
+    },
+    "require": {
+        "slim/slim": "^4.10",
+        "slim/psr7": "^1.7",
+        "illuminate/database": "^12.21",
+        "vlucas/phpdotenv": "^5.6",
+        "php-di/php-di": "^7.0",
+        "respect/validation": "^2.4"
+    }
+}
