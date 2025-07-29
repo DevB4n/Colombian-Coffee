@@ -13,9 +13,10 @@ class EloquentCoffeeRepository implements CoffeeRepositoryInterface
         return Coffee::all()->toArray();
     }
 
-    public function getByPropertie(string $propertie, mixed $value): ?Coffee
+    public function getByPropertie(string $propertie, mixed $value): array
     {
-        $response = Coffee::where($propertie,$value)->get()->toArray();
-        return $response;
+        // SELECT * FROM coffees WHERE [columna] = [valor];
+        return Coffee::where($propertie, $value)->get()->toArray();
     }
+
 }
