@@ -1,4 +1,4 @@
--- Active: 1753736497888@@127.0.0.1@3306@coffee_kawaii
+-- Active: 1753786602013@@127.0.0.1@3306@coffee
 
 -- Datase connection
 
@@ -12,21 +12,22 @@ SHOW TABLES;
 
 -- Drop tables
 
-DROP TABLE IF EXISTS pais;
-
-DROP TABLE IF EXISTS region;
-
-DROP TABLE IF EXISTS plantas_cafe;
-
-DROP TABLE IF EXISTS granos_cafe;
-
-DROP TABLE IF EXISTS tiempo_crecimiento;
-
-DROP TABLE IF EXISTS sabor;
-
 DROP TABLE IF EXISTS caracteristicas_cafe;
 
 DROP TABLE IF EXISTS datos_cafe;
+
+DROP TABLE IF EXISTS sabor;
+
+DROP TABLE IF EXISTS tiempo_crecimiento;
+
+DROP TABLE IF EXISTS granos_cafe;
+
+DROP TABLE IF EXISTS plantas_cafe;
+
+DROP TABLE IF EXISTS region;
+
+DROP TABLE IF EXISTS pais;
+
 
 -- Tables creation
 
@@ -50,14 +51,14 @@ CREATE TABLE plantas_cafe (
     especie VARCHAR(50) NOT NULL UNIQUE,               -- Ej: Coffea arabica
     nombre_comun VARCHAR(50) NOT NULL UNIQUE,          -- Ej: Cafe arabica
     color_hoja VARCHAR(50) NOT NULL,            -- Ej: Verde brillante
-    tamano_hoja_cm DECIMAL(5,2) NOT NULL,       -- Tamano promedio de la hoja (largo)
+    tamano_hoja_cm DECIMAL(5,2) NOT NULL CHECK(tamano_hoja_cm > 0),       -- Tamano promedio de la hoja (largo)
     descripcion TEXT NOT NULL
 );
 
 CREATE TABLE granos_cafe (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     planta_id INT NOT NULL,
-    tamano_grano_mm DECIMAL(4,2) NOT NULL,          -- Ej: 6.5 mm
+    tamano_grano_mm DECIMAL(4,2) NOT NULL CHECK(tamano_grano_mm > 0),          -- Ej: 6.5 mm
     color_grano VARCHAR(50) NOT NULL,               -- Ej: Verde, amarillo, rojo o marron
     forma_grano VARCHAR(50) NOT NULL,               -- Ej: Ovalado, redondo, alargado
     calidad ENUM('Bueno', 'Malo', 'Regular', 'No Consumible') NOT NULL
@@ -66,7 +67,7 @@ CREATE TABLE granos_cafe (
 CREATE TABLE tiempo_crecimiento (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     Desde_anhos DECIMAL(10,2) NOT NULL,
-    Hasta_anhos DECIMAL(10,2) NOT NULL
+    Hasta_anhos DECIMAL(10,2) NOT NULL 
 );
 
 CREATE TABLE sabor (
