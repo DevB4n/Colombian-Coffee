@@ -92,4 +92,9 @@ class EloquentCoffeeRepository implements CoffeeRepositoryInterface
         return $result;
     }
 
+
+    public function getAllByCharacteristic(string $characteristic): array
+    {
+        
+    }
 }
