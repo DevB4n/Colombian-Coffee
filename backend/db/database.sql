@@ -51,7 +51,7 @@ CREATE TABLE plantas_cafe (
     especie VARCHAR(50) NOT NULL ,               -- Ej: Coffea arabica
     nombre_comun VARCHAR(50) NOT NULL,          -- Ej: Cafe arabica
     color_hoja VARCHAR(50) NOT NULL,            -- Ej: Verde brillante
-    tamano_hoja_cm DECIMAL(5,2) NOT NULL CHECK(tamano_hoja_cm > 0),       -- Tamano promedio de la hoja (largo)
+    tamano_planta_cm DECIMAL(5,2) NOT NULL CHECK(tamano_planta_cm > 0),       -- Tamano planta
     descripcion TEXT NOT NULL
 );
 
@@ -89,7 +89,7 @@ CREATE TABLE datos_cafe (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     requerimiento_nutricion ENUM('Bajo', 'Medio', 'Alto', 'Exigente') NOT NULL,
     densidad_plantacion DECIMAL(10,2) NOT NULL,
-    resistencia VARCHAR(100) NOT NULL,
+    resistencia ENUM('En peligro','Susceptible', 'Tolerante', 'Resistente') NOT NULL,
     primera_siembra DATE NOT NULL
 );
 
@@ -178,11 +178,12 @@ VALUES
 ('Huila', 'Templado seco', 'Volcanico', 1),
 ('Caldas', 'Templado humedo', 'Franco arenoso', 1);
 
-INSERT INTO plantas_cafe (nombre_variedad, especie, nombre_comun, color_hoja, tamano_hoja_cm, descripcion)
+INSERT INTO plantas_cafe (nombre_variedad, especie, nombre_comun, color_hoja, tamano_planta_cm, descripcion)
 VALUES 
-('Castillo', 'Coffea arabica', 'Cafe arabica', 'Verde brillante', 15.50, 'Variedad resistente a enfermedades, de alta productividad.'),
-('Caturra', 'Coffea arabica', 'Cafe arabica', 'Verde oscuro', 13.75, 'Variedad de porte bajo, ideal para alta densidad de siembra.'),
-('Bourbon', 'Coffea arabica', 'Cafe arabica', 'Verde claro', 14.20, 'Variedad tradicional con buen perfil de sabor.');
+('Castillo', 'Coffea arabica', 'Cafe arabica', 'Verde brillante', 230.00, 'Variedad resistente a enfermedades, de alta productividad.'),
+('Caturra', 'Coffea arabica', 'Cafe arabica', 'Verde oscuro', 175.00, 'Variedad de porte bajo, ideal para alta densidad de siembra.'),
+('Bourbon', 'Coffea arabica', 'Cafe arabica', 'Verde claro', 400.00, 'Variedad tradicional con buen perfil de sabor.');
+
 
 INSERT INTO granos_cafe (planta_id, tamano_grano_mm, color_grano, forma_grano, calidad)
 VALUES 
@@ -205,9 +206,9 @@ VALUES
 
 INSERT INTO datos_cafe (requerimiento_nutricion, densidad_plantacion, resistencia, primera_siembra)
 VALUES 
-('Alto', 5000.00, 'Resistente a roya', '2015-04-12'),
-('Medio', 4000.00, 'Moderada resistencia a plagas', '2016-06-18'),
-('Exigente', 3000.00, 'Alta sensibilidad al clima', '2014-02-20');
+('Alto', 5000.00, 'Resistente', '2015-04-12'),
+('Medio', 4000.00, 'Tolerante', '2016-06-18'),
+('Exigente', 3000.00, 'En peligro', '2014-02-20');
 
 INSERT INTO caracteristicas_cafe (granos_cafe_id, tiempo_crecimiento_id, region_id, sabor_id, altitud_optima, datos_cafe_id)
 VALUES 

@@ -15,7 +15,7 @@ class CoffeeController
     public function index(Request $request, Response $response): Response
     {
         $useCase = new GetAllCoffee($this->repo);
-        $coffee= $useCase->execute();
+        $coffee = $useCase->execute();
 
         if(!$coffee) {
             $response->getBody()->write(json_encode(["error" => "No hay datos registrados"]));
