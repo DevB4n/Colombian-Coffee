@@ -8,5 +8,6 @@ return function(App $app) {
         $group->get('', [CoffeeController::class, 'index']);
         $group->get('/search', [CoffeeController::class, 'getByPropertie']);
         $group->get('/characteristic', [CoffeeController::class, 'getByCharacteristic']);
+        $group->delete('/characteristic', [CoffeeController::class, 'deleteByValue']);
     });
 };

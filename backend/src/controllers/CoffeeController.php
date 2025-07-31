@@ -3,6 +3,7 @@
 namespace App\controllers;
 
 use App\domain\repositories\CoffeeRepositoryInterface;
+use App\usesCases\DeleteByValue;
 use App\usesCases\GetAllCoffee;
 use App\usesCases\GetCoffeeByPropertie;
 use App\usesCases\GetAllByCharactheristic;
@@ -55,37 +56,80 @@ class CoffeeController
     }
 
     public function getByCharacteristic(Request $request, Response $response): Response
-{
-    $queryParams = $request->getQueryParams();
-    $characteristic = $queryParams['characteristic'] ?? null;
-    $valueFilter = $queryParams['value'] ?? null;
+    {
+        $queryParams = $request->getQueryParams();
+        $characteristic = $queryParams['characteristic'] ?? null;
+        $valueFilter = $queryParams['value'] ?? null;
 
-    if (!$characteristic) {
-        $response->getBody()->write(json_encode([
-            "error" => "Falta el parametro 'characteristic'"
-        ]));
-        return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
+        if (!$characteristic) {
+            $response->getBody()->write(json_encode([
+                "error" => "Falta el parametro 'characteristic'"
+            ]));
+            return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
+        }
+
+        $useCase = new GetAllByCharactheristic($this->repo);
+        $data = $useCase->getAllByCharacteristic($characteristic);
+
+        // 🟨 Aplica filtro si viene 'value'
+        if ($valueFilter !== null) {
+            $data = array_filter($data, function ($item) use ($characteristic, $valueFilter) {
+                return isset($item[$characteristic]) && $item[$characteristic] == $valueFilter;
+            });
+            $data = array_values($data); // Reindexar
+        }
+
+        if (empty($data)) {
+            $response->getBody()->write(json_encode([
+                "error" => "No se encontraron resultados con esa caracteristica/valor"
+            ]));
+            return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
+        }
+
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
-    $useCase = new GetAllByCharactheristic($this->repo);
-    $data = $useCase->getAllByCharacteristic($characteristic);
+    public function deleteByValue(Request $request, Response $response): Response
+    {
+        $params = $request->getQueryParams();
+        $characteristic = $params['characteristic'] ?? null;
+        $value = $params['value'] ?? null;
 
-    // 🟨 Aplica filtro si viene 'value'
-    if ($valueFilter !== null) {
-        $data = array_filter($data, function ($item) use ($characteristic, $valueFilter) {
-            return isset($item[$characteristic]) && $item[$characteristic] == $valueFilter;
-        });
-        $data = array_values($data); // Reindexar
+        if (!$characteristic || $value === null) {
+            $response->getBody()->write(json_encode([
+                "error" => "Faltan parametros: 'characteristic' y 'value' son requeridos"
+            ]));
+            return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
+        }
+
+        try {
+            $useCase = new DeleteByValue($this->repo);
+            $deletedCount = $useCase->execute($characteristic, $value);
+
+            if ($deletedCount === 0) {
+                $response->getBody()->write(json_encode([
+                    "message" => "No se encontraron registros para eliminar con esa caracteristica"
+                ]));
+                return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
+            }
+
+            $response->getBody()->write(json_encode([
+                "message" => "Se eliminaron $deletedCount registros con '$characteristic' = '$value'"
+            ]));
+            return $response->withHeader('Content-Type', 'application/json');
+
+        } catch (\InvalidArgumentException $e) {
+            $response->getBody()->write(json_encode([
+                "error" => $e->getMessage()
+            ]));
+            return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            $response->getBody()->write(json_encode([
+                "error" => "Error interno al eliminar: " . $e->getMessage()
+            ]));
+            return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        }
     }
 
-    if (empty($data)) {
-        $response->getBody()->write(json_encode([
-            "error" => "No se encontraron resultados con esa caracteristica/valor"
-        ]));
-        return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
-    }
-
-    $response->getBody()->write(json_encode($data));
-    return $response->withHeader('Content-Type', 'application/json');
-}
 }

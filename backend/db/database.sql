@@ -53,7 +53,7 @@ CREATE TABLE plantas_cafe (
     color_hoja VARCHAR(50) NOT NULL,            -- Ej: Verde brillante
     tamano_planta_cm DECIMAL(5,2) NOT NULL CHECK(tamano_planta_cm > 0),       -- Tamano planta
     descripcion TEXT NOT NULL,
-    imagen_url VARCHAR(150) NOT NULL
+    imagen_url TEXT NOT NULL
 );
 
 CREATE TABLE granos_cafe (
@@ -63,7 +63,7 @@ CREATE TABLE granos_cafe (
     color_grano VARCHAR(50) NOT NULL,               -- Ej: Verde, amarillo, rojo o marron
     forma_grano VARCHAR(50) NOT NULL,               -- Ej: Ovalado, redondo, alargado
     calidad ENUM('Bueno', 'Malo', 'Regular', 'No Consumible') NOT NULL,
-    imagen_url VARCHAR(150) NOT NULL
+    imagen_url TEXT NOT NULL
 );
 
 CREATE TABLE tiempo_crecimiento (
@@ -239,3 +239,5 @@ VALUES
 (4, 4, 7, 5, 700.00, 4),   -- Robusta comun en Santander, sabor Terroso
 (5, 5, 8, 6, 750.00, 5),   -- Robusta congoles en Valle del Cauca, sabor Amargo
 (6, 6, 9, 5, 1700.00, 6);  -- Clon 500 en Quindío, sabor Terroso
+
+SELECT * FROM caracteristicas_cafe;
