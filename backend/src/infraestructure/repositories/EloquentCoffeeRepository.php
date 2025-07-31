@@ -3,6 +3,12 @@
 namespace App\infraestructure\repositories;
 
 use App\domain\models\Coffee;
+use App\domain\models\Flavor;
+use App\domain\models\Grain;
+use App\domain\models\Plant;
+use App\domain\models\TimeGrowth;
+use App\domain\models\Region;
+use App\domain\models\CoffeeData;
 use App\domain\repositories\CoffeeRepositoryInterface;
 
 class EloquentCoffeeRepository implements CoffeeRepositoryInterface
@@ -46,8 +52,6 @@ class EloquentCoffeeRepository implements CoffeeRepositoryInterface
         return $result;
     }
     
-
-
     public function getByPropertie(string $propertie, mixed $value): array
     {
         $coffees = Coffee::with([
@@ -91,7 +95,6 @@ class EloquentCoffeeRepository implements CoffeeRepositoryInterface
 
         return $result;
     }
-
 
     public function getAllByCharacteristic(string $characteristic): array
     {
@@ -172,15 +175,33 @@ class EloquentCoffeeRepository implements CoffeeRepositoryInterface
         return $result;
     }
 
-    public function deleteByValue(string $characteristic, mixed $value): int
+    public function deleteFromTableById(string $table, int $id): int
     {
-        // Validacion minima para prevenir eliminacion masiva sin filtro
-        if (!in_array($characteristic, ['region_id', 'sabor_id', 'altitud_optima', 'grano_id', 'tiempo_crecimiento_id'])) {
-            throw new \InvalidArgumentException("Caracteristica no permitida para eliminación");
+        // Tabla segura con su modelo asociado
+        $allowedTables = [
+            'sabor' => Flavor::class,
+            'region' => Region::class,
+            'planta' => Plant::class,
+            'grano' => Grain::class,
+            'tiempo_crecimiento' => TimeGrowth::class,
+            'datos_cafe' => CoffeeData::class,
+            // Agrega más si las necesitas
+        ];
+
+        if (!array_key_exists($table, $allowedTables)) {
+            throw new \InvalidArgumentException("Tabla '$table' no permitida para eliminación.");
         }
 
-        // Devuelve el numero de registros eliminados
-        return Coffee::where($characteristic, $value)->delete();
+        $model = $allowedTables[$table];
+
+        // Encuentra y elimina
+        $record = $model::find($id);
+        if (!$record) {
+            return 0;
+        }
+
+        $record->delete();
+        return 1;
     }
 
 }

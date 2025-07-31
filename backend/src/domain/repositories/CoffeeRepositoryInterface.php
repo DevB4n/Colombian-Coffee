@@ -12,5 +12,5 @@ interface CoffeeRepositoryInterface {
 
     public function getAllByCharacteristic(string $characteristic):array;
 
-    public function deleteByValue(string $characteristic, mixed $value): int;
+    public function deleteFromTableById(string $table, int $id): int;
 }

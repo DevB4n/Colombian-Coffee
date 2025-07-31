@@ -3,7 +3,7 @@
 namespace App\controllers;
 
 use App\domain\repositories\CoffeeRepositoryInterface;
-use App\usesCases\DeleteByValue;
+use App\usesCases\DeleteFromTableById;
 use App\usesCases\GetAllCoffee;
 use App\usesCases\GetCoffeeByPropertie;
 use App\usesCases\GetAllByCharactheristic;
@@ -90,32 +90,32 @@ class CoffeeController
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    public function deleteByValue(Request $request, Response $response): Response
+    public function deleteFromTable(Request $request, Response $response): Response
     {
         $params = $request->getQueryParams();
-        $characteristic = $params['characteristic'] ?? null;
-        $value = $params['value'] ?? null;
+        $table = $params['table'] ?? null;
+        $id = $params['id'] ?? null;
 
-        if (!$characteristic || $value === null) {
+        if (!$table || !$id || !is_numeric($id)) {
             $response->getBody()->write(json_encode([
-                "error" => "Faltan parametros: 'characteristic' y 'value' son requeridos"
+                "error" => "Parametros requeridos: 'table' y 'id'"
             ]));
             return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
         }
 
         try {
-            $useCase = new DeleteByValue($this->repo);
-            $deletedCount = $useCase->execute($characteristic, $value);
+            $useCase = new \App\usesCases\DeleteFromTableById($this->repo);
+            $deleted = $useCase->execute($table, (int)$id);
 
-            if ($deletedCount === 0) {
+            if ($deleted === 0) {
                 $response->getBody()->write(json_encode([
-                    "message" => "No se encontraron registros para eliminar con esa caracteristica"
+                    "message" => "No se encontro el registro en '$table' con ID $id"
                 ]));
                 return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
             }
 
             $response->getBody()->write(json_encode([
-                "message" => "Se eliminaron $deletedCount registros con '$characteristic' = '$value'"
+                "message" => "Registro eliminado de '$table' con ID $id"
             ]));
             return $response->withHeader('Content-Type', 'application/json');
 
@@ -126,7 +126,7 @@ class CoffeeController
             return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
         } catch (\Exception $e) {
             $response->getBody()->write(json_encode([
-                "error" => "Error interno al eliminar: " . $e->getMessage()
+                "error" => "Error al eliminar: " . $e->getMessage()
             ]));
             return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
         }
