@@ -52,7 +52,8 @@ CREATE TABLE plantas_cafe (
     nombre_comun VARCHAR(50) NOT NULL,          -- Ej: Cafe arabica
     color_hoja VARCHAR(50) NOT NULL,            -- Ej: Verde brillante
     tamano_planta_cm DECIMAL(5,2) NOT NULL CHECK(tamano_planta_cm > 0),       -- Tamano planta
-    descripcion TEXT NOT NULL
+    descripcion TEXT NOT NULL,
+    imagen_url VARCHAR(150) NOT NULL
 );
 
 CREATE TABLE granos_cafe (
@@ -61,7 +62,8 @@ CREATE TABLE granos_cafe (
     tamano_grano_mm DECIMAL(4,2) NOT NULL CHECK(tamano_grano_mm > 0),          -- Ej: 6.5 mm
     color_grano VARCHAR(50) NOT NULL,               -- Ej: Verde, amarillo, rojo o marron
     forma_grano VARCHAR(50) NOT NULL,               -- Ej: Ovalado, redondo, alargado
-    calidad ENUM('Bueno', 'Malo', 'Regular', 'No Consumible') NOT NULL
+    calidad ENUM('Bueno', 'Malo', 'Regular', 'No Consumible') NOT NULL,
+    imagen_url VARCHAR(150) NOT NULL
 );
 
 CREATE TABLE tiempo_crecimiento (
@@ -173,45 +175,67 @@ ON UPDATE CASCADE;
 INSERT INTO pais (nombre) VALUES ('Colombia');
 
 INSERT INTO region (nombre, clima, suelo, pais_id)
-VALUES 
+VALUES
 ('Antioquia', 'Templado humedo', 'Franco arcilloso', 1),
 ('Huila', 'Templado seco', 'Volcanico', 1),
-('Caldas', 'Templado humedo', 'Franco arenoso', 1);
+('Caldas', 'Templado humedo', 'Franco arenoso', 1),
+('Tolima', 'Templado humedo', 'Arcilloso', 1),
+('Narino', 'Templado frio', 'Volcanico', 1),
+('Cauca', 'Templado humedo', 'Franco arcilloso', 1),
+('Santander', 'Templado seco', 'Franco arenoso', 1),
+('Valle del Cauca', 'Templado humedo', 'Volcanico', 1),
+('Quindio', 'Templado humedo', 'Franco arcilloso', 1);
 
-INSERT INTO plantas_cafe (nombre_variedad, especie, nombre_comun, color_hoja, tamano_planta_cm, descripcion)
+INSERT INTO plantas_cafe (nombre_variedad, especie, nombre_comun, color_hoja, tamano_planta_cm, descripcion, imagen_url)
 VALUES 
-('Castillo', 'Coffea arabica', 'Cafe arabica', 'Verde brillante', 230.00, 'Variedad resistente a enfermedades, de alta productividad.'),
-('Caturra', 'Coffea arabica', 'Cafe arabica', 'Verde oscuro', 175.00, 'Variedad de porte bajo, ideal para alta densidad de siembra.'),
-('Bourbon', 'Coffea arabica', 'Cafe arabica', 'Verde claro', 400.00, 'Variedad tradicional con buen perfil de sabor.');
+('Castillo', 'Coffea arabica', 'Cafe arabica', 'Verde brillante', 230.00, 'Variedad resistente a enfermedades, de alta productividad.', 'https://www.nurserywarehouse.com.au/cdn/shop/files/CoffeaArabica_ArabianCoffee_2.jpg?v=1732070133&width=1100'),
+('Caturra', 'Coffea arabica', 'Cafe arabica', 'Verde oscuro', 175.00, 'Variedad de porte bajo, ideal para alta densidad de siembra.', 'https://upload.wikimedia.org/wikipedia/commons/2/24/Detail_of_coffee_plant_showing_beans_and_leaves.jpg'),
+('Bourbon', 'Coffea arabica', 'Cafe arabica', 'Verde claro', 400.00, 'Variedad tradicional con buen perfil de sabor.', 'https://optimise2.assets-servd.host/worldcoffee-research/production/images/Arabica/Bourbon-2.jpg?w=1920&q=82&auto=format&fit=min&crop=focalpoint&fp-x=0.5&fp-y=0.5&dm=1684915604&s=a8c2ae68b694ece7f64a8d0079a8a4e6'),
+('Robusta comun', 'Coffea canephora', 'Cafe robusta', 'Verde oscuro', 800.00, 'Variedad clasica Robusta, ya evaluada en Colombia para uso industrial y mezclas.', 'https://worldoffloweringplants.com/wp-content/uploads/2018/10/Coffea-canephora-Robusta-Coffee1.jpg'),
+('Robusta congoles', 'Coffea canephora', 'Robusta congolea', 'Verde oscuro', 800.00, 'Variedad congolena introducida en pruebas de adaptacion en zonas bajas colombianas.', 'https://cdn.shopify.com/s/files/1/0111/2352/files/BDQ_Robusta_Coffee_Tree_01.jpg?v=1745603027'),
+('Clon 500', 'Coffea canephora', 'Clon robusta mejorado', 'Verde oscuro', 800.00, 'Clon mejorado en evaluacion por Agrosavia; mayor rendimiento y posible calidad.', 'https://www.researchgate.net/publication/366021381/figure/fig3/AS%3A11431281104868285%401670286375337/Vertical-clonal-garden-system-of-robusta-coffee-Coffea-canephora-plants-at-18-months.png');
 
-
-INSERT INTO granos_cafe (planta_id, tamano_grano_mm, color_grano, forma_grano, calidad)
+INSERT INTO granos_cafe (planta_id, tamano_grano_mm, color_grano, forma_grano, calidad, imagen_url)
 VALUES 
-(1, 6.50, 'Rojo', 'Ovalado', 'Bueno'),
-(2, 6.10, 'Amarillo', 'Redondo', 'Regular'),
-(3, 6.80, 'Marron', 'Alargado', 'Bueno');
+(1, 6.50, 'Rojo', 'Ovalado', 'Bueno', 'https://farallonesdelcitara.bioexploradores.com/wp-content/uploads/2022/10/IMG_3619-2-768x403.jpg'),
+(2, 6.10, 'Amarillo', 'Redondo', 'Regular', 'https://ocultoco.com/wp-content/uploads/2024/02/Caturra-Amarillo-Fruto-OCulto.png'),
+(3, 6.80, 'Marron', 'Alargado', 'Bueno', 'https://www.ecured.cu/images/8/8a/Rama_borbon.jpg'),
+(4, 7.00, 'Verdes', 'Ovalado', 'Bueno', 'https://coffeefactz.com/wp-content/uploads/2024/05/coffea-canephora-robusta-coffee-scaled.jpg'),
+(5, 6.80, 'Rojo', 'Redondo', 'Regular', 'https://upload.wikimedia.org/wikipedia/commons/d/da/Ripe_Seeds_Coffee_Robusta_Coorg_Karnataka_India_Feb24_D72_25688.jpg'),
+(6, 7.10, 'Marron', 'Alargado', 'Bueno', 'https://fstapdltb.filerobot.com/prismic/global/BLOG/coffea-canephora.png?vh=0baf92');
 
 INSERT INTO tiempo_crecimiento (Desde_anhos, Hasta_anhos)
 VALUES 
-(2.00, 3.50),
-(1.50, 3.00),
-(2.00, 4.00);
+(2.00, 3.50),  -- Castillo
+(1.50, 3.00),  -- Caturra
+(2.00, 4.00),  -- Bourbon
+(2.50, 4.00),  -- Robusta comun
+(2.50, 4.50),  -- Robusta congoles
+(3.00, 5.00);  -- Clon 500
 
 INSERT INTO sabor (caracteristica)
 VALUES 
 ('Dulce'),
 ('Citrico'),
 ('Chocolate'),
-('Frutal');
+('Frutal'),
+('Terroso'),
+('Amargo');
 
 INSERT INTO datos_cafe (requerimiento_nutricion, densidad_plantacion, resistencia, primera_siembra)
 VALUES 
-('Alto', 5000.00, 'Resistente', '2015-04-12'),
-('Medio', 4000.00, 'Tolerante', '2016-06-18'),
-('Exigente', 3000.00, 'En peligro', '2014-02-20');
+('Alto', 5000.00, 'Resistente', '2015-04-12'),   -- Castillo
+('Medio', 4000.00, 'Tolerante', '2016-06-18'),  -- Caturra
+('Exigente', 3000.00, 'Susceptible', '2014-02-20'), -- Bourbon
+('Medio', 2500.00, 'Resistente', '2013-05-10'),  -- Robusta comun
+('Medio', 2200.00, 'Tolerante', '2018-08-15'),   -- Robusta congoles
+('Medio', 2700.00, 'Resistente', '2019-01-25');  -- Clon 500
 
 INSERT INTO caracteristicas_cafe (granos_cafe_id, tiempo_crecimiento_id, region_id, sabor_id, altitud_optima, datos_cafe_id)
-VALUES 
-(1, 1, 1, 1, 1600.00, 1),
-(2, 2, 2, 2, 1800.00, 2),
-(3, 3, 3, 3, 1700.00, 3);
+VALUES
+(1, 1, 1, 1, 1600.00, 1),  -- Castillo en Antioquia, sabor Dulce
+(2, 2, 2, 2, 1800.00, 2),  -- Caturra en Huila, sabor Cítrico
+(3, 3, 3, 3, 1700.00, 3),  -- Bourbon en Caldas, sabor Chocolate
+(4, 4, 7, 5, 700.00, 4),   -- Robusta comun en Santander, sabor Terroso
+(5, 5, 8, 6, 750.00, 5),   -- Robusta congoles en Valle del Cauca, sabor Amargo
+(6, 6, 9, 5, 1700.00, 6);  -- Clon 500 en Quindío, sabor Terroso
