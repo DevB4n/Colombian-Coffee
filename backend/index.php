@@ -13,7 +13,7 @@ $dotenv = Dotenv::createImmutable(__DIR__ . '/');
 $dotenv->load(); // $_ENV[...]
 
 // Se carga el Container de PHP-DI
-$container = require_once 'backend/bootstrap/container.php';
+$container = require_once 'bootstrap/container.php';
 
 // Se asigna a Slim el contenedor
 AppFactory::setContainer($container);
@@ -33,9 +33,9 @@ $errorHanlder->setDefaultErrorHandler($container->get(ErrorHandlerInterface::cla
 // Ejecutando los scripts de
 
 // public/
-(require_once 'backend/public/index.php')($app);
+(require_once 'public/index.php')($app);
 
 // routes/
-(require_once 'backend/routes/coffees.php')($app);
+(require_once 'routes/coffees.php')($app);
 
 $app->run();
