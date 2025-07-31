@@ -24,7 +24,7 @@ Connection::init();
 $app = AppFactory::create();
 
 // Inyectamos ResponseFactory que necesita nuestro CustomErrorHandler
-$container->set(ResponseFactoryInterface::class, $app->getResponseFactory());
+//$container->set(ResponseFactoryInterface::class, $app->getResponseFactory());
 
 // Definir quien va a manejar los errores...
 $errorHanlder = $app->addErrorMiddleware(true, true, true);

@@ -14,10 +14,10 @@ $container->set(CoffeeRepositoryInterface::class, function () {
     return new EloquentCoffeeRepository();
 });
 
-$container->set(ErrorHandlerInterface::class, function () use ($container) {
-    return new CustomErrorHandler(
-        $container->get(ResponseFactoryInterface::class)
-    );
-});
+// $container->set(ErrorHandlerInterface::class, function () use ($container) {
+//     return new CustomErrorHandler(
+//         $container->get(ResponseFactoryInterface::class)
+//     );
+// });
 
 return $container;
