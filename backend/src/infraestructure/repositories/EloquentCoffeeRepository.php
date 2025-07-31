@@ -140,18 +140,18 @@ class EloquentCoffeeRepository implements CoffeeRepositoryInterface
             'desde_anhos' => $coffee->tiempoCrecimiento->Desde_anhos ?? null,
             'hasta_anhos' => $coffee->tiempoCrecimiento->Hasta_anhos ?? null,
 
-            // 🟡 REGIÓN
+            // 🟡 REGION
             'region' => $coffee->region->nombre ?? null,
             'clima' => $coffee->region->clima ?? null,
             'suelo' => $coffee->region->suelo ?? null,
 
-            // 🟢 PAÍS
+            // 🟢 PAIS
             'pais' => $coffee->region->pais->nombre ?? null,
 
             // 🔵 SABOR
             'sabor' => $coffee->sabor->caracteristica ?? null,
 
-            // 🟣 DATOS CAFÉ
+            // 🟣 DATOS CAFE
             'altitud_optima' => $coffee->altitud_optima ?? null,
             'requerimiento_nutricion' => $coffee->datosCafe->requerimiento_nutricion ?? null,
             'densidad_plantacion' => $coffee->datosCafe->densidad_plantacion ?? null,
