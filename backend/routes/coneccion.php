@@ -1,7 +1,7 @@
 <?php
 $apiUrl = 'http://localhost:8081/caracteristicas_cafe';
 $username = "Adrian@gmail.com";
-$password = "Hola@2020";
+$password = "soylacontra";
 $variedades = [];
 $error = null;
 
@@ -60,12 +60,142 @@ curl_close($ch);
                 <button class="btn-back" id="btnBack">← Volver al Inicio</button>
             </div>
 
+            <!-- Sección de Información del Café -->
+            <div class="coffee-info-section">
+                <div class="info-hero">
+                    <div class="info-hero-content">
+                        <h3>☕ El Fascinante Mundo del Café Colombiano</h3>
+                        <p>Colombia es el tercer productor mundial de café y el primero en café arábica suave. Nuestras tierras privilegiadas entre los trópicos ofrecen condiciones únicas para cultivar algunos de los mejores cafés del mundo.</p>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🌍</div>
+                        <div class="stat-number">32</div>
+                        <div class="stat-label">Departamentos Cafeteros</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">👨‍🌾</div>
+                        <div class="stat-number">540,000</div>
+                        <div class="stat-label">Familias Cafeteras</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">☕</div>
+                        <div class="stat-number">12M</div>
+                        <div class="stat-label">Sacos Anuales</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏔️</div>
+                        <div class="stat-number">1,200-2,000</div>
+                        <div class="stat-label">Metros de Altitud</div>
+                    </div>
+                </div>
+
+                <div class="curiosities-section">
+                    <h4>🤔 ¿Sabías que...?</h4>
+                    <div class="curiosities-grid">
+                        <div class="curiosity-card">
+                            <div class="curiosity-emoji">🌱</div>
+                            <h5>Proceso Único</h5>
+                            <p>El café colombiano se procesa por el método húmedo, lo que le da su característico sabor suave y aromático.</p>
+                        </div>
+                        <div class="curiosity-card">
+                            <div class="curiosity-emoji">🌧️</div>
+                            <h5>Dos Cosechas</h5>
+                            <p>Colombia tiene dos temporadas de cosecha al año: la principal (octubre-enero) y la mitaca (abril-junio).</p>
+                        </div>
+                        <div class="curiosity-card">
+                            <div class="curiosity-emoji">🏆</div>
+                            <h5>Calidad Premium</h5>
+                            <p>Solo el café que cumple estrictos estándares de calidad puede usar el sello "Café de Colombia".</p>
+                        </div>
+                        <div class="curiosity-card">
+                            <div class="curiosity-emoji">🌡️</div>
+                            <h5>Clima Perfecto</h5>
+                            <p>La temperatura promedio de 20°C y las lluvias regulares crean condiciones ideales para el cultivo.</p>
+                        </div>
+                        <div class="curiosity-card">
+                            <div class="curiosity-emoji">🧬</div>
+                            <h5>Variedades Únicas</h5>
+                            <p>Colombia cultiva principalmente Arábica, con variedades como Típica, Borbón, Caturra, Castillo y Geisha.</p>
+                        </div>
+                        <div class="curiosity-card">
+                            <div class="curiosity-emoji">🌿</div>
+                            <h5>Café Sostenible</h5>
+                            <p>El 80% de los cafetales colombianos están bajo sombra, preservando la biodiversidad y el ecosistema.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="regions-highlight">
+                    <h4>🗺️ Regiones Cafeteras Principales</h4>
+                    <div class="regions-grid">
+                        <div class="region-card">
+                            <h5>🏔️ Eje Cafetero</h5>
+                            <p><strong>Caldas, Quindío, Risaralda:</strong> Corazón de la cultura cafetera colombiana. Café con cuerpo medio y acidez brillante.</p>
+                        </div>
+                        <div class="region-card">
+                            <h5>🌋 Huila</h5>
+                            <p><strong>Región Sur:</strong> Cafés con notas frutales y florales, cultivados en suelos volcánicos ricos en minerales.</p>
+                        </div>
+                        <div class="region-card">
+                            <h5>🏞️ Nariño</h5>
+                            <p><strong>Frontera con Ecuador:</strong> Cafés de altura con acidez vibrante y perfiles complejos de sabor.</p>
+                        </div>
+                        <div class="region-card">
+                            <h5>⛰️ Antioquia</h5>
+                            <p><strong>Región Norte:</strong> Cafés balanceados con buen cuerpo y notas achocolatadas.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quality-indicators">
+                    <h4>⭐ Indicadores de Calidad</h4>
+                    <div class="quality-grid">
+                        <div class="quality-item">
+                            <div class="quality-icon">🔍</div>
+                            <div class="quality-content">
+                                <h6>Tamaño del Grano</h6>
+                                <p>Granos más grandes (15-18 mm) indican mejor calidad y desarrollo.</p>
+                            </div>
+                        </div>
+                        <div class="quality-item">
+                            <div class="quality-icon">🎨</div>
+                            <div class="quality-content">
+                                <h6>Color Uniforme</h6>
+                                <p>Un color homogéneo verde azulado indica procesamiento adecuado.</p>
+                            </div>
+                        </div>
+                        <div class="quality-item">
+                            <div class="quality-icon">👃</div>
+                            <div class="quality-content">
+                                <h6>Aroma Fresco</h6>
+                                <p>Los granos de calidad mantienen su aroma característico y fresco.</p>
+                            </div>
+                        </div>
+                        <div class="quality-item">
+                            <div class="quality-icon">💧</div>
+                            <div class="quality-content">
+                                <h6>Humedad Correcta</h6>
+                                <p>Entre 10-12% de humedad garantiza conservación y sabor óptimos.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <?php if ($error): ?>
                 <div class="error-message">
                     <h3>⚠️ Error al cargar datos</h3>
                     <p><?php echo htmlspecialchars($error); ?></p>
                 </div>
             <?php else: ?>
+                <div class="catalog-title-section">
+                    <h3>🌟 Nuestras Variedades Destacadas</h3>
+                    <p>Explora las características únicas de cada variedad de café colombiano</p>
+                </div>
+
                 <div class="cafe-grid">
                     <?php foreach ($variedades as $cafe): ?>
                         <div class="cafe-card">
@@ -180,6 +310,28 @@ curl_close($ch);
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
+
+            <!-- Footer del catálogo -->
+            <div class="catalog-footer">
+                <div class="footer-content">
+                    <h4>☕ Café de Colombia - Patrimonio Cultural de la Humanidad</h4>
+                    <p>El Paisaje Cultural Cafetero de Colombia fue declarado Patrimonio de la Humanidad por la UNESCO en 2011, reconociendo la tradición, el esfuerzo y la dedicación de nuestros caficultores.</p>
+                    <div class="footer-stats">
+                        <div class="footer-stat">
+                            <strong>UNESCO 2011</strong>
+                            <span>Patrimonio Mundial</span>
+                        </div>
+                        <div class="footer-stat">
+                            <strong>100+ años</strong>
+                            <span>Tradición Cafetera</span>
+                        </div>
+                        <div class="footer-stat">
+                            <strong>Juan Valdez</strong>
+                            <span>Embajador Mundial</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         
         <!-- Modales originales del login -->

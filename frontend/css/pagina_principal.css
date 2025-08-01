@@ -157,6 +157,315 @@ body {
     background-clip: text;
 }
 
+/* === NUEVAS SECCIONES INFORMATIVAS === */
+
+/* Sección de información del café */
+.coffee-info-section {
+    max-width: 1400px;
+    margin: 0 auto 40px;
+    padding: 20px;
+}
+
+/* Hero de información */
+.info-hero {
+    background: linear-gradient(135deg, rgba(139, 69, 19, 0.9), rgba(210, 105, 30, 0.9));
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 30px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.info-hero h3 {
+    color: #FFD700;
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.info-hero p {
+    color: white;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Grid de estadísticas */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 248, 248, 0.95));
+    padding: 30px 20px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    border-color: #D2691E;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.3);
+}
+
+.stat-icon {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #8B4513;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    color: #654321;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+/* Sección de curiosidades */
+.curiosities-section {
+    margin-bottom: 40px;
+}
+
+.curiosities-section h4 {
+    color: #FFD700;
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 25px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.curiosities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.curiosity-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 248, 248, 0.95));
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+    border-left: 4px solid #8B4513;
+}
+
+.curiosity-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    border-left-color: #D2691E;
+}
+
+.curiosity-emoji {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.curiosity-card h5 {
+    color: #8B4513;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.curiosity-card p {
+    color: #555;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+/* Sección de regiones */
+.regions-highlight {
+    margin-bottom: 40px;
+}
+
+.regions-highlight h4 {
+    color: #FFD700;
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 25px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.regions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.region-card {
+    background: linear-gradient(135deg, rgba(139, 69, 19, 0.9), rgba(160, 82, 45, 0.9));
+    padding: 25px;
+    border-radius: 12px;
+    color: white;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.region-card:hover {
+    transform: translateY(-3px);
+    border-color: #FFD700;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+.region-card h5 {
+    color: #FFD700;
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+    font-weight: bold;
+}
+
+.region-card p {
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+.region-card strong {
+    color: #FFA500;
+}
+
+/* Indicadores de calidad */
+.quality-indicators {
+    margin-bottom: 40px;
+}
+
+.quality-indicators h4 {
+    color: #FFD700;
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 25px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.quality-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.quality-item {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 248, 248, 0.95));
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.quality-item:hover {
+    transform: translateY(-3px);
+    border-color: #8B4513;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.quality-icon {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+}
+
+.quality-content h6 {
+    color: #8B4513;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.quality-content p {
+    color: #555;
+    line-height: 1.4;
+    font-size: 0.9rem;
+}
+
+/* Título de catálogo */
+.catalog-title-section {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px 0;
+}
+
+.catalog-title-section h3 {
+    color: #FFD700;
+    font-size: 2rem;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.catalog-title-section p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+}
+
+/* Footer del catálogo */
+.catalog-footer {
+    margin-top: 50px;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, rgba(139, 69, 19, 0.9), rgba(210, 105, 30, 0.9));
+    border-radius: 20px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.footer-content h4 {
+    color: #FFD700;
+    font-size: 1.6rem;
+    margin-bottom: 15px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.footer-content p {
+    color: white;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.footer-stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.footer-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.footer-stat strong {
+    color: #FFD700;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.footer-stat span {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+}
+
+/* === ESTILOS ORIGINALES DE LAS TARJETAS === */
+
 /* Grid de café */
 .cafe-grid {
     display: grid;
@@ -480,6 +789,46 @@ body {
         font-size: 2rem;
     }
     
+    .info-hero {
+        padding: 25px;
+    }
+    
+    .info-hero h3 {
+        font-size: 1.8rem;
+    }
+    
+    .info-hero p {
+        font-size: 1rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+    }
+    
+    .stat-card {
+        padding: 20px 15px;
+    }
+    
+    .curiosities-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .regions-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .quality-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .footer-stats {
+        gap: 20px;
+    }
+    
     .cafe-grid {
         grid-template-columns: 1fr;
         gap: 20px;
@@ -526,6 +875,41 @@ body {
     
     .cafe-catalog {
         padding: 15px;
+    }
+    
+    .coffee-info-section {
+        padding: 15px;
+    }
+    
+    .info-hero {
+        padding: 20px;
+    }
+    
+    .info-hero h3 {
+        font-size: 1.5rem;
+    }
+    
+    .stat-card {
+        padding: 15px 10px;
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+    }
+    
+    .curiosity-card,
+    .region-card,
+    .quality-item {
+        padding: 20px;
+    }
+    
+    .catalog-footer {
+        padding: 25px 15px;
+    }
+    
+    .footer-stats {
+        flex-direction: column;
+        gap: 15px;
     }
     
     .cafe-grid {
