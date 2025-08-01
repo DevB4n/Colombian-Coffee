@@ -122,12 +122,12 @@ class EloquentCoffeeRepository implements CoffeeRepositoryInterface
                 'tamano_planta_cm' => $coffee->grano->planta->tamano_planta_cm ?? null,
                 'descripcion' => $coffee->grano->planta->descripcion ?? null,
                 'porte' => match (true) {
-                    $coffee->grano->planta->tamano_planta_cm > 450 => 'Alto',
-                    $coffee->grano->planta->tamano_planta_cm >= 350 => 'Medio Largo',
-                    $coffee->grano->planta->tamano_planta_cm >= 200 => 'Medio Corto',
-                    $coffee->grano->planta->tamano_planta_cm >= 100 => 'Medio',
-                    $coffee->grano->planta->tamano_planta_cm > 0 => 'Bajo',
-                    default => null,
+                    ($coffee->grano->planta->tamano_planta_cm ?? 0) > 450 => 'Alto',
+                    ($coffee->grano->planta->tamano_planta_cm ?? 0) >= 350 => 'Medio Largo',
+                    ($coffee->grano->planta->tamano_planta_cm ?? 0) >= 200 => 'Medio Corto',
+                    ($coffee->grano->planta->tamano_planta_cm ?? 0) >= 100 => 'Medio',
+                    ($coffee->grano->planta->tamano_planta_cm ?? 0) > 0 => 'Bajo',
+                    default => null
                 },
 
                 // 🟤 GRANO

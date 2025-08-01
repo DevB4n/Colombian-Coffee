@@ -165,4 +165,28 @@ class CoffeeController
         }
     }
 
+    public function updateFromTable(Request $request, Response $response, array $args): Response
+    {
+        $table = $args['table'];
+        $id = (int)$args['id'];
+        $data = $request->getParsedBody();
+
+        try {
+            $useCase = new \App\usesCases\UpdateCoffee($this->repo);
+            $updated = $useCase->execute($table, $id, $data);
+
+            $response->getBody()->write(json_encode([
+                'message' => "Registro actualizado correctamente",
+                'data' => $updated
+            ]));
+
+            return $response->withHeader('Content-Type', 'application/json');
+        } catch (\InvalidArgumentException $e) {
+            $response->getBody()->write(json_encode(['error' => $e->getMessage()]));
+            return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            $response->getBody()->write(json_encode(['error' => "Error al actualizar: " . $e->getMessage()]));
+            return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        }
+    }
 }
