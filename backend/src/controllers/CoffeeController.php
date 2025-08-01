@@ -3,10 +3,12 @@
 namespace App\controllers;
 
 use App\domain\repositories\CoffeeRepositoryInterface;
+use App\usesCases\CreateCoffee;
 use App\usesCases\DeleteFromTableById;
 use App\usesCases\GetAllCoffee;
 use App\usesCases\GetCoffeeByPropertie;
 use App\usesCases\GetAllByCharactheristic;
+use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -127,6 +129,36 @@ class CoffeeController
         } catch (\Exception $e) {
             $response->getBody()->write(json_encode([
                 "error" => "Error al eliminar: " . $e->getMessage()
+            ]));
+            return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        }
+    }
+
+    public function create(Request $request, Response $response): Response
+    {
+        $data = $request->getParsedBody();
+
+        if(!$data| !is_array($data)) {
+            $response->getBody()->write(json_encode([
+                "error" => "Datos invalidos o faltantes en la solicitud"
+            ]));
+            return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
+        }
+
+        try {
+            $useCase = new CreateCoffee($this->repo);
+            $coffee = $useCase->execute($data);
+
+            $response->getBody()->write(json_encode([
+                "message" => "Datos insertados correctamente",
+                "data" => $coffee
+            ]));
+
+            return $response->withStatus(201)->withHeader('Content-Type', 'application/json');
+            
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode([
+                "error" => "Error al crear: " . $e->getMessage()
             ]));
             return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
         }

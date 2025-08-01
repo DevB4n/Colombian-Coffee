@@ -1,21 +1,16 @@
 <?php
 
-namespace App\application\usecases;
+namespace App\usesCases;
 
 use App\domain\repositories\CoffeeRepositoryInterface;
 use App\domain\models\Coffee;
 
-class CreateCoffeeUseCase
+class CreateCoffee
 {
-    private CoffeeRepositoryInterface $coffeeRepository;
-
-    public function __construct(CoffeeRepositoryInterface $coffeeRepository)
-    {
-        $this->coffeeRepository = $coffeeRepository;
-    }
+    public function __construct(private CoffeeRepositoryInterface $repo) {}
 
     public function execute(array $data): array
     {
-        return $this->coffeeRepository->create($data);
+        return $this->repo->create($data);
     }
 }
