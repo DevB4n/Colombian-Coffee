@@ -10,6 +10,7 @@ use App\domain\models\TimeGrowth;
 use App\domain\models\Region;
 use App\domain\models\CoffeeData;
 use App\domain\repositories\CoffeeRepositoryInterface;
+use Illuminate\Support\Facades\DB; 
 
 class EloquentCoffeeRepository implements CoffeeRepositoryInterface
 {
@@ -203,5 +204,52 @@ class EloquentCoffeeRepository implements CoffeeRepositoryInterface
         $record->delete();
         return 1;
     }
+
+    public function create(array $data): array
+{
+    return DB::transaction(function () use ($data) {
+        // 1. Crear o encontrar planta
+        $plant = Plant::firstOrCreate(
+            ['nombre_variedad' => $data['plant']['nombre_variedad']],
+            $data['plant']
+        );
+
+        // 2. Crear grano
+        $grain = new Grain($data['grain']);
+        $grain->planta_id = $plant->id;
+        $grain->save();
+
+        // 3. Tiempo crecimiento
+        $growth = TimeGrowth::create($data['time_growth']);
+
+        // 4. Sabor
+        $flavor = Flavor::firstOrCreate(
+            ['caracteristica' => $data['flavor']]
+        );
+
+        // 5. Región
+        $region = Region::firstOrCreate(
+            ['nombre' => $data['region']['nombre']],
+            $data['region']
+        );
+
+        // 6. Datos de café
+        $coffeeData = CoffeeData::create($data['coffee_data']);
+
+        // 7. Crear café principal
+        $coffee = new Coffee([
+            'granos_cafe_id' => $grain->id,
+            'tiempo_crecimiento_id' => $growth->id,
+            'region_id' => $region->id,
+            'sabor_id' => $flavor->id,
+            'altitud_optima' => $data['altitud_optima'],
+            'datos_cafe_id' => $coffeeData->id,
+        ]);
+
+        $coffee->save();
+
+        return $coffee;
+    });
+}
 
 }
