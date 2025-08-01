@@ -3,15 +3,16 @@
 namespace App\domain\models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Region extends Model
 {
     protected $table = 'region';
+    protected $fillable = ['nombre', 'clima', 'suelo', 'pais_id'];
+
     public $timestamps = false;
 
-    public function pais(): BelongsTo
+    public function pais()
     {
-        return $this->belongsTo(Country::class, 'pais_id');
+        return $this->belongsTo(Country::class);
     }
 }

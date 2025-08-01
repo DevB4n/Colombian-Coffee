@@ -2,6 +2,8 @@
 
 namespace App\domain\models;
 
+
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 

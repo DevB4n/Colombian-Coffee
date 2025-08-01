@@ -3,16 +3,19 @@
 namespace App\domain\models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Grain extends Model // Permite mapear la db
+class Grain extends Model
 {
     protected $table = 'granos_cafe';
+    protected $fillable = [
+        'planta_id', 'tamano_grano_mm', 'color_grano',
+        'forma_grano', 'calidad', 'imagen_url'
+    ];
+
     public $timestamps = false;
 
-    public function planta(): BelongsTo
+    public function planta()
     {
-        // Ayuda a representar la relacion de tablas
         return $this->belongsTo(Plant::class, 'planta_id');
     }
 }
