@@ -3,6 +3,7 @@
 namespace App\controllers;
 
 use App\domain\repositories\CoffeeRepositoryInterface;
+use App\usesCases\UpdateCoffee;
 use App\usesCases\CreateCoffee;
 use App\usesCases\DeleteFromTableById;
 use App\usesCases\GetAllCoffee;

@@ -9,6 +9,7 @@ return function(App $app) {
         $group->get('/search', [CoffeeController::class, 'getByPropertie']);
         $group->get('/characteristic', [CoffeeController::class, 'getByCharacteristic']);
         $group->post('/post', [CoffeeController::class, 'create']);
+        $group->patch('/update', [CoffeeController::class, 'updateFromTable']);
         $group->delete('/delete', [CoffeeController::class, 'deleteFromTable']);
     });
 };

@@ -15,4 +15,6 @@ interface CoffeeRepositoryInterface {
     public function deleteFromTableById(string $table, int $id): int;
 
     public function create(array $data):array;
+
+    public function updateFromTableById(string $table, int $id, array $data): array;
 }

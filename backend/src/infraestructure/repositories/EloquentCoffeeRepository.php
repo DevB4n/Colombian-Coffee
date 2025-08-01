@@ -187,7 +187,7 @@ class EloquentCoffeeRepository implements CoffeeRepositoryInterface
             'grano' => Grain::class,
             'tiempo_crecimiento' => TimeGrowth::class,
             'datos_cafe' => CoffeeData::class,
-            // Agrega más si las necesitas
+            // Agrega mas si las necesitas
         ];
 
         if (!array_key_exists($table, $allowedTables)) {
@@ -234,10 +234,10 @@ class EloquentCoffeeRepository implements CoffeeRepositoryInterface
                 $data['region']
             );
 
-            // 6. Datos de café
+            // 6. Datos de cafe
             $coffeeData = CoffeeData::create($data['coffee_data']);
 
-            // 7. Crear café principal
+            // 7. Crear cafe principal
             $coffee = new Coffee([
                 'granos_cafe_id' => $grain->id,
                 'tiempo_crecimiento_id' => $growth->id,
@@ -257,6 +257,38 @@ class EloquentCoffeeRepository implements CoffeeRepositoryInterface
                 'datosCafe'
             ])->toArray();
         });
+    }
+
+    public function updateFromTableById(string $table, int $id, array $data): array
+    {
+        // Lista de tablas permitidas con su modelo asociado
+        $allowedTables = [
+            'planta' => Plant::class,
+            'grano' => Grain::class,
+            'tiempo_crecimiento' => TimeGrowth::class,
+            'region' => Region::class,
+            'sabor' => Flavor::class,
+            'datos_cafe' => CoffeeData::class,
+            'cafe' => Coffee::class,
+        ];
+
+        if (!array_key_exists($table, $allowedTables)) {
+            throw new \InvalidArgumentException("Tabla '$table' no permitida para actualización.");
+        }
+
+        $model = $allowedTables[$table];
+
+        // Buscar el registro
+        $record = $model::find($id);
+        if (!$record) {
+            throw new \Exception("No se encontró el registro en '$table' con ID $id.");
+        }
+
+        // Actualizar los campos
+        $record->update($data);
+
+        // Devolver el registro actualizado
+        return $record->fresh()->toArray();
     }
 
 }
