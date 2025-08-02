@@ -28,6 +28,8 @@ DROP TABLE IF EXISTS region;
 
 DROP TABLE IF EXISTS pais;
 
+DROP TABLE IF EXISTS usuarios;
+
 
 -- Tables creation
 
@@ -94,6 +96,14 @@ CREATE TABLE datos_cafe (
     resistencia ENUM('En peligro','Susceptible', 'Tolerante', 'Resistente') NOT NULL,
     primera_siembra DATE NOT NULL
 );
+
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_usuario VARCHAR(100) NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
 
 /*
 -- Altura planta --
