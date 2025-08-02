@@ -3,25 +3,26 @@
 namespace App\useCases;
 
 use App\domain\repositories\UserRepository;
+use App\domain\models\User;
 
 class LoginUser {
-    private $userRepo;
+    private $userRepository;
 
-    public function __construct(UserRepository $userRepo) {
-        $this->userRepo = $userRepo;
+    public function __construct(UserRepository $userRepository) {
+        $this->userRepository = $userRepository;
     }
 
-    public function execute($email, $password) {
-        $user = $this->userRepo->findByEmail($email);
+    public function execute(string $email, string $password): User {
+        $user = $this->userRepository->findByEmail($email);
 
-        if (!$user || !password_verify($password, $user->password)) {
-            return null;
+        if (!$user) {
+            throw new \Exception("Usuario no encontrado");
         }
 
-        return [
-            "id" => $user->id,
-            "nombre_usuario" => $user->nombre_usuario,
-            "email" => $user->email
-        ];
+        if (!password_verify($password, $user->getPassword())) {
+            throw new \Exception("Contraseña incorrecta");
+        }
+
+        return $user;
     }
 }

@@ -19,7 +19,12 @@ class UserRepositoryImpl implements UserRepository {
         $row = $stmt->fetch();
 
         if ($row) {
-            return new User($row['id'], $row['email'], $row['password'], $row['nombre_usuario']);
+            return new User(
+                $row['id'],
+                $row['username'], // username
+                $row['email'],
+                $row['password']
+            );
         }
 
         return null;
