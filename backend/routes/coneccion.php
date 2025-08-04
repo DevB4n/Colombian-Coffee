@@ -49,7 +49,6 @@ curl_close($ch);
             <div class="login-options" id="loginOptions">
                 <button class="login-btn" id="userLogin">Ingresar como Usuario</button>
                 <button class="login-btn" id="adminLogin">Ingresar como Administrador</button>
-                <button class="login-btn" id="showCatalog">Ver Catálogo de Café</button>
             </div>
         </div>
 
