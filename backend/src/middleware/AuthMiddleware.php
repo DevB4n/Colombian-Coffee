@@ -1,28 +1,39 @@
 <?php
-namespace App\middleware;
 
-use Psr\Http\Message\ResponseInterface as Response;
+namespace App\Middleware;
+
+use App\Domain\Models\User;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
 use Slim\Exception\HttpUnauthorizedException;
+use Slim\Psr7\Response as SlimResponse;
 
 class AuthMiddleware
 {
+    // $repo = new AuthMiddleware() <- ()
+    public function __construct() {}
+
     public function __invoke(Request $request, Handler $handler): Response
     {
-        $authHeader = $request->getHeaderLine('Authorization');
+        $auth = $request->getHeaderLine('Authorization'); //Basic YWRyaWFucnVpejFAZ21haWwuY29tOjFhZHJpYW4kOTkw
 
-        if (!$authHeader || !preg_match('/Basic\s+(.*)$/i', $authHeader, $matches)) {
-            throw new HttpUnauthorizedException($request, "No se proporcionaron credenciales.");
+        if (!$auth || !str_starts_with($auth, 'Basic ')) {
+            throw new HttpUnauthorizedException($request);
         }
 
-        $decoded = base64_decode($matches[1]);
-        list($user, $pass) = explode(':', $decoded, 2);
+        $decoded = base64_decode(substr($auth, 6));
+        [$email, $password] = explode(':', $decoded); //adrian@gmail.com:12345
 
-        // Credenciales quemadas por ahora
-        if ($user !== 'Adrian@gmail.com' || $pass !== 'soylacontra') {
-            throw new HttpUnauthorizedException($request, "Credenciales incorrectas.");
+        //Cambiar al repositorio encargado....
+        $user = User::where('email', $email)->first();
+
+        //Validamos contrasena
+        if (!$user || !password_verify($password, $user->password)) {
+            throw new HttpUnauthorizedException($request);
         }
+
+        $request = $request->withAttribute('user', $user);
 
         return $handler->handle($request);
     }

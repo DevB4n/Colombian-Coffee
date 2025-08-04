@@ -1,23 +1,14 @@
 <?php
 
-namespace App\domain\models;
+namespace App\Domain\Models;
 
-class User {
-    public $id;
-    public $email;
-    public $password;
-    public $username;
+use Illuminate\Database\Eloquent\Model;
 
-        // backend/domain/models/User.php
-public function __construct($id, $username, $email, $password) {
-    $this->id = $id;
-    $this->username = $username;
-    $this->email = $email;
-    $this->password = $password;
-}
-
-
-    public function getPassword() {
-        return $this->password;
-    }
+class User extends Model
+{   
+    protected $table = 'usuarios';
+    protected $primaryKey = 'id'; // Llave primaria
+    public $timestamps = false; // Habilita el uso de created_at y updated_at
+    protected $fillable = ['nombre', 'email', 'password', 'rol']; // Columnas habilitadas para la insercion
+    protected $hidden = ['password'];
 }
