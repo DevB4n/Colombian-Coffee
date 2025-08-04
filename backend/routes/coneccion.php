@@ -187,7 +187,7 @@ curl_close($ch);
                           </div>
                         </div>
 
-                      </div>
+                      </div> 
                     </div>
 
             </div>
