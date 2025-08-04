@@ -202,9 +202,135 @@ curl_close($ch);
                     <h3>🌟 Nuestras Variedades Destacadas</h3>
                     <p>Explora las características únicas de cada variedad de café colombiano</p>
                 </div>
+                
+                <!-- 🔥 AQUÍ ES DONDE REEMPLAZAS LA SECCIÓN ANTIGUA 🔥 -->
+                <!-- ELIMINA ESTAS LÍNEAS:
                 <div class="search-variety" style="text-align: center; margin-bottom: 30px;">
                     <input type="text" id="searchInput" placeholder="Buscar variedad de café (ej. Castillo) 🔎" style="padding: 12px 20px; border-radius: 20px; border: 2px solid #D2691E; font-size: 1rem; width: 80%; max-width: 500px;">
+                </div>
+                -->
+                
+                <!-- Y AGREGA ESTA NUEVA SECCIÓN DE BÚSQUEDA Y FILTROS -->
+                <div class="search-filter-section" style="max-width: 1200px; margin: 0 auto 40px; padding: 20px;">
+                    <div class="search-filter-container" style="background: linear-gradient(135deg, rgba(139, 69, 19, 0.9), rgba(210, 105, 30, 0.9)); border-radius: 20px; padding: 30px; backdrop-filter: blur(10px); border: 2px solid rgba(255, 215, 0, 0.3);">
+                        
+                        <!-- Título de la sección -->
+                        <h3 style="color: #FFD700; text-align: center; font-size: 1.8rem; margin-bottom: 25px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                            🔎 Buscar y Filtrar Variedades
+                        </h3>
+                        
+                        <!-- Buscador principal -->
+                        <div class="search-main" style="margin-bottom: 25px; text-align: center;">
+                            <input type="text" 
+                                   id="searchInput" 
+                                   placeholder="Buscar por nombre de variedad (ej. Castillo, Caturra) 🔍" 
+                                   style="padding: 15px 25px; border-radius: 25px; border: 2px solid #FFD700; font-size: 1.1rem; width: 90%; max-width: 600px; background: rgba(255, 255, 255, 0.95); box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                        </div>
+                        
+                        <!-- Filtros por características -->
+                        <div class="filters-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 20px;">
+                            
+                            <!-- Filtro por Calidad -->
+                            <div class="filter-group">
+                                <label style="color: #FFD700; font-weight: bold; display: block; margin-bottom: 8px; font-size: 1rem;">
+                                    ⭐ Calidad del Grano:
+                                </label>
+                                <select id="filterCalidad" style="width: 100%; padding: 10px 15px; border-radius: 15px; border: 2px solid #D2691E; background: rgba(255, 255, 255, 0.95); font-size: 0.95rem;">
+                                    <option value="">Todas las calidades</option>
+                                    <option value="bueno">Bueno</option>
+                                    <option value="regular">Regular</option>
+                                    <option value="excelente">Excelente</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Filtro por Región -->
+                            <div class="filter-group">
+                                <label style="color: #FFD700; font-weight: bold; display: block; margin-bottom: 8px; font-size: 1rem;">
+                                    📍 Región:
+                                </label>
+                                <select id="filterRegion" style="width: 100%; padding: 10px 15px; border-radius: 15px; border: 2px solid #D2691E; background: rgba(255, 255, 255, 0.95); font-size: 0.95rem;">
+                                    <option value="">Todas las regiones</option>
+                                    <option value="huila">Huila</option>
+                                    <option value="nariño">Nariño</option>
+                                    <option value="antioquia">Antioquia</option>
+                                    <option value="eje cafetero">Eje Cafetero</option>
+                                    <option value="santander">Santander</option>
+                                    <option value="cauca">Cauca</option>
+                                    <option value="tolima">Tolima</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Filtro por Color del Grano -->
+                            <div class="filter-group">
+                                <label style="color: #FFD700; font-weight: bold; display: block; margin-bottom: 8px; font-size: 1rem;">
+                                    🎨 Color del Grano:
+                                </label>
+                                <select id="filterColorGrano" style="width: 100%; padding: 10px 15px; border-radius: 15px; border: 2px solid #D2691E; background: rgba(255, 255, 255, 0.95); font-size: 0.95rem;">
+                                    <option value="">Todos los colores</option>
+                                    <option value="verde">Verde</option>
+                                    <option value="amarillo">Amarillo</option>
+                                    <option value="marrón">Marrón</option>
+                                    <option value="rojizo">Rojizo</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Filtro por Tamaño del Grano -->
+                            <div class="filter-group">
+                                <label style="color: #FFD700; font-weight: bold; display: block; margin-bottom: 8px; font-size: 1rem;">
+                                    📏 Tamaño del Grano:
+                                </label>
+                                <select id="filterTamanoGrano" style="width: 100%; padding: 10px 15px; border-radius: 15px; border: 2px solid #D2691E; background: rgba(255, 255, 255, 0.95); font-size: 0.95rem;">
+                                    <option value="">Todos los tamaños</option>
+                                    <option value="pequeño">Pequeño (< 5mm)</option>
+                                    <option value="mediano">Mediano (5-7mm)</option>
+                                    <option value="grande">Grande (> 7mm)</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Filtro por Resistencia -->
+                            <div class="filter-group">
+                                <label style="color: #FFD700; font-weight: bold; display: block; margin-bottom: 8px; font-size: 1rem;">
+                                    🛡️ Resistencia:
+                                </label>
+                                <select id="filterResistencia" style="width: 100%; padding: 10px 15px; border-radius: 15px; border: 2px solid #D2691E; background: rgba(255, 255, 255, 0.95); font-size: 0.95rem;">
+                                    <option value="">Todos los tipos</option>
+                                    <option value="roya">Resistente a Roya</option>
+                                    <option value="plagas">Resistente a Plagas</option>
+                                    <option value="sequía">Resistente a Sequía</option>
+                                    <option value="alta">Alta Resistencia</option>
+                                    <option value="media">Media Resistencia</option>
+                                    <option value="baja">Baja Resistencia</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Filtro por Altitud -->
+                            <div class="filter-group">
+                                <label style="color: #FFD700; font-weight: bold; display: block; margin-bottom: 8px; font-size: 1rem;">
+                                    🏔️ Altitud Óptima:
+                                </label>
+                                <select id="filterAltitud" style="width: 100%; padding: 10px 15px; border-radius: 15px; border: 2px solid #D2691E; background: rgba(255, 255, 255, 0.95); font-size: 0.95rem;">
+                                    <option value="">Todas las altitudes</option>
+                                    <option value="baja">Baja (< 1200 msnm)</option>
+                                    <option value="media">Media (1200-1600 msnm)</option>
+                                    <option value="alta">Alta (> 1600 msnm)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Botones de acción -->
+                        <div class="filter-actions" style="text-align: center; margin-top: 20px;">
+                            <button id="clearFilters" 
+                                    style="background: linear-gradient(45deg, #6B4423, #8B4513); color: white; border: none; padding: 12px 25px; border-radius: 20px; cursor: pointer; font-size: 1rem; margin: 0 10px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                                🔄 Limpiar Filtros
+                            </button>
+                            <span id="resultsCount" 
+                                  style="color: #FFD700; font-weight: bold; font-size: 1.1rem; margin-left: 20px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                                Mostrando todas las variedades
+                            </span>
+                        </div>
                     </div>
+                </div>
+                
                 <div class="cafe-grid">
                     <?php foreach ($variedades as $cafe): ?>
                         <div class="cafe-card" data-name="<?php echo htmlspecialchars($cafe['grano']['planta']['nombre_variedad']); ?>">

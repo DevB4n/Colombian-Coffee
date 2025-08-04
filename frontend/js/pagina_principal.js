@@ -492,3 +492,302 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+// Función mejorada para búsqueda y filtros múltiples
+document.addEventListener('DOMContentLoaded', () => {
+    // Elementos de filtros
+    const searchInput = document.getElementById('searchInput');
+    const filterCalidad = document.getElementById('filterCalidad');
+    const filterRegion = document.getElementById('filterRegion');
+    const filterColorGrano = document.getElementById('filterColorGrano');
+    const filterTamanoGrano = document.getElementById('filterTamanoGrano');
+    const filterResistencia = document.getElementById('filterResistencia');
+    const filterAltitud = document.getElementById('filterAltitud');
+    const clearFiltersBtn = document.getElementById('clearFilters');
+    const resultsCount = document.getElementById('resultsCount');
+    
+    // Aplicar filtros y búsqueda
+    function applyFilters() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const calidadFilter = filterCalidad.value.toLowerCase();
+        const regionFilter = filterRegion.value.toLowerCase();
+        const colorGranoFilter = filterColorGrano.value.toLowerCase();
+        const tamanoGranoFilter = filterTamanoGrano.value.toLowerCase();
+        const resistenciaFilter = filterResistencia.value.toLowerCase();
+        const altitudFilter = filterAltitud.value.toLowerCase();
+        
+        const cards = document.querySelectorAll('.cafe-card');
+        let visibleCount = 0;
+        
+        cards.forEach(card => {
+            let shouldShow = true;
+            
+            // Obtener datos de la tarjeta
+            const cardText = card.textContent.toLowerCase();
+            const varietyName = card.dataset.name?.toLowerCase() || '';
+            
+            // Filtro de búsqueda por texto
+            if (searchTerm && !varietyName.includes(searchTerm) && !cardText.includes(searchTerm)) {
+                shouldShow = false;
+            }
+            
+            // Filtro por calidad
+            if (calidadFilter && shouldShow) {
+                const calidadElement = card.querySelector('.quality-badge');
+                const calidad = calidadElement ? calidadElement.textContent.toLowerCase().trim() : '';
+                if (!calidad.includes(calidadFilter)) {
+                    shouldShow = false;
+                }
+            }
+            
+            // Filtro por región
+            if (regionFilter && shouldShow) {
+                const regionText = extractInfoFromCard(card, 'región');
+                if (!regionText.toLowerCase().includes(regionFilter)) {
+                    shouldShow = false;
+                }
+            }
+            
+            // Filtro por color del grano
+            if (colorGranoFilter && shouldShow) {
+                const colorText = extractInfoFromCard(card, 'color');
+                if (!colorText.toLowerCase().includes(colorGranoFilter)) {
+                    shouldShow = false;
+                }
+            }
+            
+            // Filtro por tamaño del grano
+            if (tamanoGranoFilter && shouldShow) {
+                const tamanoText = extractInfoFromCard(card, 'tamaño');
+                const tamanoValue = parseFloat(tamanoText);
+                
+                if (!isNaN(tamanoValue)) {
+                    switch(tamanoGranoFilter) {
+                        case 'pequeño':
+                            if (tamanoValue >= 5) shouldShow = false;
+                            break;
+                        case 'mediano':
+                            if (tamanoValue < 5 || tamanoValue > 7) shouldShow = false;
+                            break;
+                        case 'grande':
+                            if (tamanoValue <= 7) shouldShow = false;
+                            break;
+                    }
+                } else {
+                    shouldShow = false;
+                }
+            }
+            
+            // Filtro por resistencia
+            if (resistenciaFilter && shouldShow) {
+                const resistenciaText = extractInfoFromCard(card, 'resistencia');
+                if (!resistenciaText.toLowerCase().includes(resistenciaFilter)) {
+                    shouldShow = false;
+                }
+            }
+            
+            // Filtro por altitud
+            if (altitudFilter && shouldShow) {
+                const altitudText = extractInfoFromCard(card, 'altitud óptima');
+                const altitudValue = parseFloat(altitudText);
+                
+                if (!isNaN(altitudValue)) {
+                    switch(altitudFilter) {
+                        case 'baja':
+                            if (altitudValue >= 1200) shouldShow = false;
+                            break;
+                        case 'media':
+                            if (altitudValue < 1200 || altitudValue > 1600) shouldShow = false;
+                            break;
+                        case 'alta':
+                            if (altitudValue <= 1600) shouldShow = false;
+                            break;
+                    }
+                } else {
+                    shouldShow = false;
+                }
+            }
+            
+            // Mostrar u ocultar tarjeta con animación
+            if (shouldShow) {
+                card.style.display = 'block';
+                card.style.animation = 'fadeInScale 0.3s ease';
+                visibleCount++;
+            } else {
+                card.style.animation = 'fadeOutScale 0.3s ease';
+                setTimeout(() => {
+                    card.style.display = 'none';
+                }, 300);
+            }
+        });
+        
+        // Actualizar contador de resultados
+        updateResultsCount(visibleCount, cards.length);
+    }
+    
+    // Función para extraer información específica de una tarjeta
+    function extractInfoFromCard(card, labelText) {
+        const labels = card.querySelectorAll('.label');
+        let result = '';
+        
+        labels.forEach(label => {
+            if (label.textContent.toLowerCase().includes(labelText.toLowerCase())) {
+                const valueElement = label.parentElement.querySelector('.value');
+                if (valueElement) {
+                    result = valueElement.textContent.trim();
+                }
+            }
+        });
+        
+        return result;
+    }
+    
+    // Actualizar contador de resultados
+    function updateResultsCount(visible, total) {
+        if (visible === total) {
+            resultsCount.textContent = `Mostrando todas las variedades (${total})`;
+            resultsCount.style.color = '#FFD700';
+        } else if (visible === 0) {
+            resultsCount.textContent = 'No se encontraron variedades con estos criterios';
+            resultsCount.style.color = '#FF6B6B';
+        } else {
+            resultsCount.textContent = `Mostrando ${visible} de ${total} variedades`;
+            resultsCount.style.color = '#90EE90';
+        }
+    }
+    
+    // Limpiar todos los filtros
+    function clearAllFilters() {
+        searchInput.value = '';
+        filterCalidad.value = '';
+        filterRegion.value = '';
+        filterColorGrano.value = '';
+        filterTamanoGrano.value = '';
+        filterResistencia.value = '';
+        filterAltitud.value = '';
+        
+        // Mostrar todas las tarjetas
+        const cards = document.querySelectorAll('.cafe-card');
+        cards.forEach(card => {
+            card.style.display = 'block';
+            card.style.animation = 'fadeInScale 0.3s ease';
+        });
+        
+        updateResultsCount(cards.length, cards.length);
+        
+        // Notificación de limpieza
+        showNotification('Filtros limpiados - Mostrando todas las variedades', 'info');
+    }
+    
+    // Event listeners para todos los filtros
+    if (searchInput) {
+        searchInput.addEventListener('input', debounce(applyFilters, 300));
+    }
+    
+    if (filterCalidad) {
+        filterCalidad.addEventListener('change', applyFilters);
+    }
+    
+    if (filterRegion) {
+        filterRegion.addEventListener('change', applyFilters);
+    }
+    
+    if (filterColorGrano) {
+        filterColorGrano.addEventListener('change', applyFilters);
+    }
+    
+    if (filterTamanoGrano) {
+        filterTamanoGrano.addEventListener('change', applyFilters);
+    }
+    
+    if (filterResistencia) {
+        filterResistencia.addEventListener('change', applyFilters);
+    }
+    
+    if (filterAltitud) {
+        filterAltitud.addEventListener('change', applyFilters);
+    }
+    
+    if (clearFiltersBtn) {
+        clearFiltersBtn.addEventListener('click', clearAllFilters);
+    }
+    
+    // Función debounce para mejorar performance
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+    
+    // Inicializar contador
+    const initialCards = document.querySelectorAll('.cafe-card');
+    updateResultsCount(initialCards.length, initialCards.length);
+    
+    // Autocompletar dinámico para la búsqueda (opcional)
+    function setupAutocomplete() {
+        const varieties = [];
+        const cards = document.querySelectorAll('.cafe-card');
+        
+        cards.forEach(card => {
+            const name = card.dataset.name;
+            if (name && !varieties.includes(name)) {
+                varieties.push(name);
+            }
+        });
+        
+        // Aquí podrías implementar un autocompletado más sofisticado
+        searchInput.addEventListener('focus', () => {
+            searchInput.setAttribute('placeholder', 
+                `Buscar entre ${varieties.length} variedades (ej. ${varieties.slice(0, 2).join(', ')}) 🔍`
+            );
+        });
+        
+        searchInput.addEventListener('blur', () => {
+            searchInput.setAttribute('placeholder', 
+                'Buscar por nombre de variedad (ej. Castillo, Caturra) 🔍'
+            );
+        });
+    }
+    
+    setupAutocomplete();
+});
+
+// Agregar estilos de animación para las transiciones de filtros
+const filterAnimationStyles = document.createElement('style');
+filterAnimationStyles.textContent = `
+    @keyframes fadeInScale {
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    
+    @keyframes fadeOutScale {
+        from {
+            opacity: 1;
+            transform: scale(1);
+        }
+        to {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+    }
+    
+    .cafe-card {
+        transition: all 0.3s ease;
+    }
+    
+    .cafe-card:hover {
+        transform: translateY(-5px) scale(1.02);
+    }
+`;
+document.head.appendChild(filterAnimationStyles);
