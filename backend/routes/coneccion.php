@@ -31,6 +31,9 @@ curl_close($ch);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo de Variedades de Café</title>
     <link rel="stylesheet" href="../../frontend/css/pagina_principal.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 </head>
 <body>
     <div class="container">
@@ -90,6 +93,13 @@ curl_close($ch);
                         <div class="stat-label">Metros de Altitud</div>
                     </div>
                 </div>
+                <div class="coffee-map-section" style="margin-bottom: 40px;">
+                    <h4 class="map-title" style="color: #FFD700; text-align: center; font-size: 1.8rem; margin-bottom: 20px;">
+                        📍 Regiones donde se cultiva nuestro café
+                    </h4>
+                    <div id="map" style="height: 450px; border-radius: 15px; overflow: hidden; border: 2px solid #D2691E;"></div>
+                </div>
+
 
                 <div class="curiosities-section">
                     <h4>🤔 ¿Sabías que...?</h4>
@@ -150,38 +160,36 @@ curl_close($ch);
                 </div>
 
                 <div class="quality-indicators">
-                    <h4>⭐ Indicadores de Calidad</h4>
-                    <div class="quality-grid">
-                        <div class="quality-item">
-                            <div class="quality-icon">🔍</div>
-                            <div class="quality-content">
-                                <h6>Tamaño del Grano</h6>
-                                <p>Granos más grandes (15-18 mm) indican mejor calidad y desarrollo.</p>
-                            </div>
+                      <h4>Indicadores de calidad</h4>
+                      <div class="quality-grid">
+
+                        <div class="quality-item" data-region="Huila" data-info="Café suave, con notas dulces y cuerpo medio.">
+                          <div class="quality-icon">🌱</div>
+                          <div class="quality-content">
+                            <h6>Altura ideal</h6>
+                            <p>Entre 1200 y 1800 msnm</p>
+                          </div>
                         </div>
-                        <div class="quality-item">
-                            <div class="quality-icon">🎨</div>
-                            <div class="quality-content">
-                                <h6>Color Uniforme</h6>
-                                <p>Un color homogéneo verde azulado indica procesamiento adecuado.</p>
-                            </div>
+
+                        <div class="quality-item" data-region="Nariño" data-info="Café con notas cítricas y dulces gracias a la altura.">
+                          <div class="quality-icon">🌤️</div>
+                          <div class="quality-content">
+                            <h6>Clima templado</h6>
+                            <p>18°C a 22°C</p>
+                          </div>
                         </div>
-                        <div class="quality-item">
-                            <div class="quality-icon">👃</div>
-                            <div class="quality-content">
-                                <h6>Aroma Fresco</h6>
-                                <p>Los granos de calidad mantienen su aroma característico y fresco.</p>
-                            </div>
+
+                        <div class="quality-item" data-region="Antioquia" data-info="Café con cuerpo medio y sabor achocolatado.">
+                          <div class="quality-icon">🌾</div>
+                          <div class="quality-content">
+                            <h6>Tipo de suelo</h6>
+                            <p>Volcánico y fértil</p>
+                          </div>
                         </div>
-                        <div class="quality-item">
-                            <div class="quality-icon">💧</div>
-                            <div class="quality-content">
-                                <h6>Humedad Correcta</h6>
-                                <p>Entre 10-12% de humedad garantiza conservación y sabor óptimos.</p>
-                            </div>
-                        </div>
+
+                      </div>
                     </div>
-                </div>
+
             </div>
 
             <?php if ($error): ?>
@@ -194,10 +202,12 @@ curl_close($ch);
                     <h3>🌟 Nuestras Variedades Destacadas</h3>
                     <p>Explora las características únicas de cada variedad de café colombiano</p>
                 </div>
-
+                <div class="search-variety" style="text-align: center; margin-bottom: 30px;">
+                    <input type="text" id="searchInput" placeholder="Buscar variedad de café (ej. Castillo) 🔎" style="padding: 12px 20px; border-radius: 20px; border: 2px solid #D2691E; font-size: 1rem; width: 80%; max-width: 500px;">
+                    </div>
                 <div class="cafe-grid">
                     <?php foreach ($variedades as $cafe): ?>
-                        <div class="cafe-card">
+                        <div class="cafe-card" data-name="<?php echo htmlspecialchars($cafe['grano']['planta']['nombre_variedad']); ?>">
                             <!-- Imagen del grano -->
                             <div class="image-container">
                                 <img src="<?php echo htmlspecialchars($cafe['grano']['imagen_url']); ?>" 
@@ -397,6 +407,62 @@ curl_close($ch);
             </div>
         </div>
     </div>
+    <script>
+  const map = L.map('map').setView([4.5, -74.2], 6); // Centro de Colombia
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  // Definir el emoji como ícono HTML
+  const iconEmoji = (emoji = "📍") => L.divIcon({
+    html: `<div style="font-size: 1.8rem;">${emoji}</div>`,
+    className: '',
+    iconSize: [24, 24]
+  });
+
+  // Zonas cafeteras
+  const zonasCafeteras = [
+    {
+      nombre: "Huila",
+      tipoCafe: "Café suave y balanceado",
+      coords: [2.5359, -75.5277]
+    },
+    {
+      nombre: "Nariño",
+      tipoCafe: "Notas cítricas y dulces",
+      coords: [1.2891, -77.3579]
+    },
+    {
+      nombre: "Antioquia",
+      tipoCafe: "Cuerpo medio, notas a chocolate",
+      coords: [6.2518, -75.5636]
+    },
+    {
+      nombre: "Santander",
+      tipoCafe: "Aroma intenso, acidez media",
+      coords: [7.1254, -73.1198]
+    },
+    {
+      nombre: "Cauca",
+      tipoCafe: "Dulce, floral y frutal",
+      coords: [2.4448, -76.6147]
+    },
+    {
+      nombre: "Tolima",
+      tipoCafe: "Acidez media y buen cuerpo",
+      coords: [4.4389, -75.2322]
+    }
+  ];
+
+  // Agregar cada marcador con emoji
+  zonasCafeteras.forEach(zona => {
+    L.marker(zona.coords, { icon: iconEmoji("📍") })
+      .addTo(map)
+      .bindPopup(`<strong>${zona.nombre}</strong><br>${zona.tipoCafe}`);
+  });
+</script>
+
     
     <script src="../../frontend/js/pagina_principal.js"></script>
 </body>

@@ -461,4 +461,34 @@ function searchCatalog(searchTerm) {
         card.style.display = shouldShow ? 'block' : 'none';
     });
 }
+document.addEventListener('DOMContentLoaded', () => {
+    const qualityItems = document.querySelectorAll('.quality-item');
+  
+    qualityItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const region = item.dataset.region || "Región cafetera";
+        const info = item.dataset.info || "Información no disponible";
+  
+        showNotification(`${region}: ${info}`, 'info');
+      });
+    });
+  });
 
+document.addEventListener('DOMContentLoaded', () => {
+  const searchInput = document.getElementById('searchInput');
+
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      const term = searchInput.value.toLowerCase();
+      const cards = document.querySelectorAll('.cafe-card');
+
+      cards.forEach(card => {
+        const name = card.dataset.name?.toLowerCase() || '';
+        const text = card.textContent.toLowerCase();
+
+        const matches = name.includes(term) || text.includes(term);
+        card.style.display = matches ? 'block' : 'none';
+      });
+    });
+  }
+});
