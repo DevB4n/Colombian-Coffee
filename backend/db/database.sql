@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 -- Active: 1754307429048@@127.0.0.1@3306@coffee
+=======
+-- Active: 1754306268955@@127.0.0.1@3306@coffee
+>>>>>>> f3eae3700206b99aa280c8bf7fe491a74761bc62
 
 -- Datase connection
 
