@@ -198,7 +198,8 @@ curl_close($ch);
                     <h3>🌟 Nuestras Variedades Destacadas</h3>
                     <p>Explora las características únicas de cada variedad de café colombiano</p>
                     <button class="btn-add-product" id="btnAddProduct">➕ Agregar Nuevo Producto</button>
-                    <button id="btnOpenDeleteModal" class="btn-delete">🗑️ Eliminar Variedad</button>
+                    <button class="btn-update" id="btnOpenUpdateModal">✏️ Actualizar Registro</button>
+                    <button class="btn-delete" id="btnOpenDeleteModal">🗑️ Eliminar Variedad</button>
                 </div>
                 
                 <!-- Sección de búsqueda y filtros -->
@@ -654,7 +655,47 @@ curl_close($ch);
                 </div>
             </div>
 
-        <!-- Modal para agregar nuevo producto -->
+        <!-- Modal para actualizar producto -->
+        <div class="modal" id="updateProductModal">
+            <div class="modal-content">
+                <span class="close-btn" id="closeUpdateProductModal">&times;</span>
+                <h2>✏️ Actualizar Registro</h2>
+                <form id="updateProductForm">
+                    <div class="form-group">
+                        <label for="update_table">Tabla a actualizar:</label>
+                        <select id="update_table" required>
+                            <option value="">Seleccione una tabla</option>
+                            <option value="planta">Planta</option>
+                            <option value="grano">Grano</option>
+                            <option value="region">Región</option>
+                            <option value="sabor">Sabor</option>
+                            <option value="tiempo_crecimiento">Tiempo de Crecimiento</option>
+                            <option value="datos_cafe">Datos del Café</option>
+                            <option value="cafe">Café (completo)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="update_id">ID del registro:</label>
+                        <input type="number" id="update_id" placeholder="Ingrese el ID" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="update_field">Campo a modificar:</label>
+                        <input type="text" id="update_field" placeholder="Ej: nombre_variedad" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="update_value">Nuevo valor:</label>
+                        <input type="text" id="update_value" placeholder="Nuevo valor" required>
+                    </div>
+
+                    <button type="submit" class="btn-update">✏️ Actualizar</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal para eliminar producto -->
         <div class="modal" id="deleteProductModal">
             <div class="modal-content">
                 <span class="close-btn" id="closeDeleteProductModal">&times;</span>

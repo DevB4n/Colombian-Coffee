@@ -178,6 +178,30 @@ function initializeEvents() {
         }
     });
 
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleUserRegistration();
+        });
+    }
+
+    const deleteProductForm = document.getElementById('deleteProductForm');
+    if (deleteProductForm) {
+        deleteProductForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleDeleteProduct();
+        });
+    }
+
+    const updateProductForm = document.getElementById('updateProductForm');
+    if (updateProductForm) {
+        updateProductForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleUpdateProduct();
+        });
+    }
+
     // Eventos para elementos interactivos
     initializeInteractiveElements();
 }
@@ -648,6 +672,72 @@ function handleAddProduct() {
         console.error('Error inesperado:', error);
         showNotification('Error inesperado al procesar el formulario', 'error');
     }
+}
+
+const updateModal = document.getElementById('updateProductModal');
+const openUpdateBtn = document.getElementById('btnOpenUpdateModal');
+const closeUpdateBtn = document.getElementById('closeUpdateProductModal');
+
+if (openUpdateBtn && updateModal && closeUpdateBtn) {
+    openUpdateBtn.addEventListener('click', () => {
+        updateModal.style.display = 'block';
+    });
+
+    closeUpdateBtn.addEventListener('click', () => {
+        updateModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target === updateModal) {
+            updateModal.style.display = 'none';
+        }
+    });
+}
+
+// Función para actualizar registro
+function handleUpdateProduct() {
+    const table = document.getElementById('update_table').value.trim();
+    const id = document.getElementById('update_id').value.trim();
+    const field = document.getElementById('update_field').value.trim();
+    const value = document.getElementById('update_value').value.trim();
+
+    if (!table || !id || !field || !value) {
+        showNotification('Todos los campos son obligatorios.', 'error');
+        return;
+    }
+
+    const data = {};
+    data[field] = value;
+
+    const submitBtn = document.querySelector('#updateProductForm .btn-update');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'Actualizando... <span class="spinner"></span>';
+
+    fetch(`http://localhost:8081/caracteristicas_cafe/${table}/${id}`, {
+        method: 'PATCH',
+        headers: {
+            'Authorization': 'Basic ' + btoa('Adrian@gmail.com:soylacontra'),
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(async res => {
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error || 'Error desconocido');
+        return json;
+    })
+    .then(data => {
+        showNotification('Registro actualizado correctamente', 'success');
+        setTimeout(() => window.location.reload(), 1500);
+    })
+    .catch(err => {
+        console.error('Error al actualizar:', err);
+        showNotification(`Error: ${err.message}`, 'error');
+    })
+    .finally(() => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Actualizar';
+    });
 }
 
 function handleDeleteProduct() {
