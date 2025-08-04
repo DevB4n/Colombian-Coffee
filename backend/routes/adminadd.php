@@ -9,6 +9,8 @@ $error = null;
 $ch = curl_init($apiUrl);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_USERPWD, "$username:$password");
+curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 $response = curl_exec($ch);
 
 if (curl_errno($ch)) {
@@ -33,7 +35,6 @@ curl_close($ch);
     <link rel="stylesheet" href="../../frontend/css/pagina_admi.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
 </head>
 <body>
     <div class="container">
@@ -93,13 +94,13 @@ curl_close($ch);
                         <div class="stat-label">Metros de Altitud</div>
                     </div>
                 </div>
+                
                 <div class="coffee-map-section" style="margin-bottom: 40px;">
                     <h4 class="map-title" style="color: #FFD700; text-align: center; font-size: 1.8rem; margin-bottom: 20px;">
                         📍 Regiones donde se cultiva nuestro café
                     </h4>
                     <div id="map" style="height: 450px; border-radius: 15px; overflow: hidden; border: 2px solid #D2691E;"></div>
                 </div>
-
 
                 <div class="curiosities-section">
                     <h4>🤔 ¿Sabías que...?</h4>
@@ -160,36 +161,31 @@ curl_close($ch);
                 </div>
 
                 <div class="quality-indicators">
-                      <h4>Indicadores de calidad</h4>
-                      <div class="quality-grid">
-
+                    <h4>Indicadores de calidad</h4>
+                    <div class="quality-grid">
                         <div class="quality-item" data-region="Huila" data-info="Café suave, con notas dulces y cuerpo medio.">
-                          <div class="quality-icon">🌱</div>
-                          <div class="quality-content">
-                            <h6>Altura ideal</h6>
-                            <p>Entre 1200 y 1800 msnm</p>
-                          </div>
+                            <div class="quality-icon">🌱</div>
+                            <div class="quality-content">
+                                <h6>Altura ideal</h6>
+                                <p>Entre 1200 y 1800 msnm</p>
+                            </div>
                         </div>
-
                         <div class="quality-item" data-region="Nariño" data-info="Café con notas cítricas y dulces gracias a la altura.">
-                          <div class="quality-icon">🌤️</div>
-                          <div class="quality-content">
-                            <h6>Clima templado</h6>
-                            <p>18°C a 22°C</p>
-                          </div>
+                            <div class="quality-icon">🌤️</div>
+                            <div class="quality-content">
+                                <h6>Clima templado</h6>
+                                <p>18°C a 22°C</p>
+                            </div>
                         </div>
-
                         <div class="quality-item" data-region="Antioquia" data-info="Café con cuerpo medio y sabor achocolatado.">
-                          <div class="quality-icon">🌾</div>
-                          <div class="quality-content">
-                            <h6>Tipo de suelo</h6>
-                            <p>Volcánico y fértil</p>
-                          </div>
+                            <div class="quality-icon">🌾</div>
+                            <div class="quality-content">
+                                <h6>Tipo de suelo</h6>
+                                <p>Volcánico y fértil</p>
+                            </div>
                         </div>
-
-                      </div>
                     </div>
-
+                </div>
             </div>
 
             <?php if ($error): ?>
@@ -205,7 +201,7 @@ curl_close($ch);
                     <button id="btnOpenDeleteModal" class="btn-delete">🗑️ Eliminar Variedad</button>
                 </div>
                 
-                <!-- Y AGREGA ESTA NUEVA SECCIÓN DE BÚSQUEDA Y FILTROS -->
+                <!-- Sección de búsqueda y filtros -->
                 <div class="search-filter-section" style="max-width: 1200px; margin: 0 auto 40px; padding: 20px;">
                     <div class="search-filter-container" style="background: linear-gradient(135deg, rgba(139, 69, 19, 0.9), rgba(210, 105, 30, 0.9)); border-radius: 20px; padding: 30px; backdrop-filter: blur(10px); border: 2px solid rgba(255, 215, 0, 0.3);">
                         
@@ -327,117 +323,140 @@ curl_close($ch);
                 </div>
                 
                 <div class="cafe-grid">
-                    <?php foreach ($variedades as $cafe): ?>
-                        <div class="cafe-card" data-name="<?php echo htmlspecialchars($cafe['grano']['planta']['nombre_variedad']); ?>">
-                            <!-- Imagen del grano -->
-                            <div class="image-container">
-                                <img src="<?php echo htmlspecialchars($cafe['grano']['imagen_url']); ?>" 
-                                     alt="Grano <?php echo htmlspecialchars($cafe['grano']['planta']['nombre_variedad']); ?>" 
-                                     class="cafe-image"
-                                     onerror="this.src='https://via.placeholder.com/300x200?text=Imagen+no+disponible'">
-                                <div class="image-overlay">
-                                    <span class="variety-name"><?php echo htmlspecialchars($cafe['grano']['planta']['nombre_variedad']); ?></span>
-                                </div>
-                            </div>
+                    <?php if (!empty($variedades) && is_array($variedades)): ?>
+                        <?php foreach ($variedades as $cafe): ?>
+                            <?php if (isset($cafe['grano']['planta']['nombre_variedad'])): ?>
+                                <div class="cafe-card" data-name="<?php echo htmlspecialchars($cafe['grano']['planta']['nombre_variedad']); ?>">
+                                    <!-- Imagen del grano -->
+                                    <div class="image-container">
+                                        <img src="<?php echo htmlspecialchars($cafe['grano']['imagen_url'] ?? 'https://via.placeholder.com/300x200?text=Imagen+no+disponible'); ?>" 
+                                             alt="Grano <?php echo htmlspecialchars($cafe['grano']['planta']['nombre_variedad']); ?>" 
+                                             class="cafe-image"
+                                             onerror="this.src='https://via.placeholder.com/300x200?text=Imagen+no+disponible'">
+                                        <div class="image-overlay">
+                                            <span class="variety-name"><?php echo htmlspecialchars($cafe['grano']['planta']['nombre_variedad']); ?></span>
+                                        </div>
+                                    </div>
 
-                            <div class="card-content">
-                                <div class="variedad-title">
-                                    <?php echo htmlspecialchars($cafe['grano']['planta']['nombre_variedad']); ?>
-                                    <span class="quality-badge quality-<?php echo strtolower($cafe['grano']['calidad']); ?>">
-                                        <?php echo htmlspecialchars($cafe['grano']['calidad']); ?>
-                                    </span>
-                                </div>
+                                    <div class="card-content">
+                                        <div class="variedad-title">
+                                            <?php echo htmlspecialchars($cafe['grano']['planta']['nombre_variedad']); ?>
+                                            <span class="quality-badge quality-<?php echo strtolower($cafe['grano']['calidad'] ?? 'regular'); ?>">
+                                                <?php echo htmlspecialchars($cafe['grano']['calidad'] ?? 'N/A'); ?>
+                                            </span>
+                                        </div>
 
-                                <!-- Información del Grano -->
-                                <div class="info-section">
-                                    <div class="info-title">🌾 Características del Grano</div>
-                                    <div class="info-grid">
-                                        <div class="info-item">
-                                            <span class="label">Tamaño:</span>
-                                            <span class="value"><?php echo htmlspecialchars($cafe['grano']['tamano_grano_mm']); ?> mm</span>
+                                        <!-- Información del Grano -->
+                                        <div class="info-section">
+                                            <div class="info-title">🌾 Características del Grano</div>
+                                            <div class="info-grid">
+                                                <div class="info-item">
+                                                    <span class="label">Tamaño:</span>
+                                                    <span class="value"><?php echo htmlspecialchars($cafe['grano']['tamano_grano_mm'] ?? 'N/A'); ?> mm</span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="label">Color:</span>
+                                                    <span class="value"><?php echo htmlspecialchars($cafe['grano']['color_grano'] ?? 'N/A'); ?></span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="label">Forma:</span>
+                                                    <span class="value"><?php echo htmlspecialchars($cafe['grano']['forma_grano'] ?? 'N/A'); ?></span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="label">Sabor:</span>
+                                                    <span class="value"><?php echo htmlspecialchars($cafe['sabor'] ?? 'N/A'); ?></span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="info-item">
-                                            <span class="label">Color:</span>
-                                            <span class="value"><?php echo htmlspecialchars($cafe['grano']['color_grano']); ?></span>
+
+                                        <!-- Imagen de la Planta -->
+                                        <div class="plant-image-container">
+                                            <img src="<?php echo htmlspecialchars($cafe['grano']['planta']['imagen_url'] ?? 'https://via.placeholder.com/300x180?text=Planta+no+disponible'); ?>" 
+                                                 alt="Planta <?php echo htmlspecialchars($cafe['grano']['planta']['nombre_variedad']); ?>" 
+                                                 class="planta-image"
+                                                 onerror="this.src='https://via.placeholder.com/300x180?text=Planta+no+disponible'">
                                         </div>
-                                        <div class="info-item">
-                                            <span class="label">Forma:</span>
-                                            <span class="value"><?php echo htmlspecialchars($cafe['grano']['forma_grano']); ?></span>
+
+                                        <!-- Información de la Planta -->
+                                        <div class="info-section">
+                                            <div class="info-title">🌱 Información de la Planta</div>
+                                            <div class="info-grid">
+                                                <div class="info-item">
+                                                    <span class="label">Especie:</span>
+                                                    <span class="value"><?php echo htmlspecialchars($cafe['grano']['planta']['especie'] ?? 'N/A'); ?></span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="label">Altura:</span>
+                                                    <span class="value"><?php echo htmlspecialchars($cafe['grano']['planta']['tamano_planta_cm'] ?? 'N/A'); ?> cm</span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="label">Color hoja:</span>
+                                                    <span class="value"><?php echo htmlspecialchars($cafe['grano']['planta']['color_hoja'] ?? 'N/A'); ?></span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="label">Región:</span>
+                                                    <span class="value"><?php echo htmlspecialchars($cafe['region'] ?? 'N/A'); ?></span>
+                                                </div>
+                                            </div>
+                                            <div class="description">
+                                                <p><strong>Descripción:</strong> <?php echo htmlspecialchars($cafe['grano']['planta']['descripcion'] ?? 'No disponible'); ?></p>
+                                            </div>
                                         </div>
-                                        <div class="info-item">
-                                            <span class="label">Sabor:</span>
-                                            <span class="value"><?php echo htmlspecialchars($cafe['sabor']); ?></span>
+
+                                        <!-- Datos de Cultivo -->
+                                        <div class="info-section">
+                                            <div class="info-title">📊 Datos de Cultivo</div>
+                                            <div class="info-grid">
+                                                <div class="info-item">
+                                                    <span class="label">Altitud óptima:</span>
+                                                    <span class="value"><?php echo htmlspecialchars($cafe['altitud_optima'] ?? 'N/A'); ?> msnm</span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="label">Densidad:</span>
+                                                    <span class="value"><?php echo isset($cafe['datos_cafe']['densidad_plantacion']) ? number_format($cafe['datos_cafe']['densidad_plantacion']) : 'N/A'; ?> plantas/ha</span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="label">Resistencia:</span>
+                                                    <span class="value"><?php echo htmlspecialchars($cafe['datos_cafe']['resistencia'] ?? 'N/A'); ?></span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="label">Nutrición:</span>
+                                                    <span class="value"><?php echo htmlspecialchars($cafe['datos_cafe']['requerimiento_nutricion'] ?? 'N/A'); ?></span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="label">Crecimiento:</span>
+                                                    <span class="value">
+                                                        <?php 
+                                                        $desde = $cafe['tiempo_crecimiento']['Desde_anhos'] ?? 'N/A';
+                                                        $hasta = $cafe['tiempo_crecimiento']['Hasta_anhos'] ?? 'N/A';
+                                                        echo htmlspecialchars($desde . ' - ' . $hasta); 
+                                                        ?> años
+                                                    </span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="label">Primera siembra:</span>
+                                                    <span class="value">
+                                                        <?php 
+                                                        if (isset($cafe['datos_cafe']['primera_siembra'])) {
+                                                            echo date('d/m/Y', strtotime($cafe['datos_cafe']['primera_siembra']));
+                                                        } else {
+                                                            echo 'N/A';
+                                                        }
+                                                        ?>
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- Imagen de la Planta -->
-                                <div class="plant-image-container">
-                                    <img src="<?php echo htmlspecialchars($cafe['grano']['planta']['imagen_url']); ?>" 
-                                         alt="Planta <?php echo htmlspecialchars($cafe['grano']['planta']['nombre_variedad']); ?>" 
-                                         class="planta-image"
-                                         onerror="this.src='https://via.placeholder.com/300x180?text=Planta+no+disponible'">
-                                </div>
-
-                                <!-- Información de la Planta -->
-                                <div class="info-section">
-                                    <div class="info-title">🌱 Información de la Planta</div>
-                                    <div class="info-grid">
-                                        <div class="info-item">
-                                            <span class="label">Especie:</span>
-                                            <span class="value"><?php echo htmlspecialchars($cafe['grano']['planta']['especie']); ?></span>
-                                        </div>
-                                        <div class="info-item">
-                                            <span class="label">Altura:</span>
-                                            <span class="value"><?php echo htmlspecialchars($cafe['grano']['planta']['tamano_planta_cm']); ?> cm</span>
-                                        </div>
-                                        <div class="info-item">
-                                            <span class="label">Color hoja:</span>
-                                            <span class="value"><?php echo htmlspecialchars($cafe['grano']['planta']['color_hoja']); ?></span>
-                                        </div>
-                                        <div class="info-item">
-                                            <span class="label">Región:</span>
-                                            <span class="value"><?php echo htmlspecialchars($cafe['region']); ?></span>
-                                        </div>
-                                    </div>
-                                    <div class="description">
-                                        <p><strong>Descripción:</strong> <?php echo htmlspecialchars($cafe['grano']['planta']['descripcion']); ?></p>
-                                    </div>
-                                </div>
-
-                                <!-- Datos de Cultivo -->
-                                <div class="info-section">
-                                    <div class="info-title">📊 Datos de Cultivo</div>
-                                    <div class="info-grid">
-                                        <div class="info-item">
-                                            <span class="label">Altitud óptima:</span>
-                                            <span class="value"><?php echo htmlspecialchars($cafe['altitud_optima']); ?> msnm</span>
-                                        </div>
-                                        <div class="info-item">
-                                            <span class="label">Densidad:</span>
-                                            <span class="value"><?php echo number_format($cafe['datos_cafe']['densidad_plantacion']); ?> plantas/ha</span>
-                                        </div>
-                                        <div class="info-item">
-                                            <span class="label">Resistencia:</span>
-                                            <span class="value"><?php echo htmlspecialchars($cafe['datos_cafe']['resistencia']); ?></span>
-                                        </div>
-                                        <div class="info-item">
-                                            <span class="label">Nutrición:</span>
-                                            <span class="value"><?php echo htmlspecialchars($cafe['datos_cafe']['requerimiento_nutricion']); ?></span>
-                                        </div>
-                                        <div class="info-item">
-                                            <span class="label">Crecimiento:</span>
-                                            <span class="value"><?php echo htmlspecialchars($cafe['tiempo_crecimiento']['Desde_anhos']); ?> - <?php echo htmlspecialchars($cafe['tiempo_crecimiento']['Hasta_anhos']); ?> años</span>
-                                        </div>
-                                        <div class="info-item">
-                                            <span class="label">Primera siembra:</span>
-                                            <span class="value"><?php echo date('d/m/Y', strtotime($cafe['datos_cafe']['primera_siembra'])); ?></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="error-message">
+                            <h3>📭 No hay variedades disponibles</h3>
+                            <p>No se encontraron variedades de café en la base de datos.</p>
                         </div>
-                    <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
 
@@ -500,8 +519,8 @@ curl_close($ch);
                     <button type="submit" class="submit-btn">Ingresar</button>
                 </form>
             </div>
-                </div>
-
+        </div>
+        
         <!-- Modal para agregar nuevo producto -->
         <div class="modal" id="addProductModal">
             <div class="modal-content">
@@ -531,6 +550,10 @@ curl_close($ch);
                             <label for="descripcion_planta">Descripción:</label>
                             <textarea id="descripcion_planta" rows="3" required></textarea>
                         </div>
+                        <div class="form-group">
+                            <label for="imagen_planta_url">URL de la Imagen de la Planta:</label>
+                            <input type="url" id="imagen_planta_url" required>
+                        </div>
                     </div>
                             
                     <!-- Información del Grano -->
@@ -539,54 +562,97 @@ curl_close($ch);
                         <div class="form-group">
                             <label for="tamano_grano_mm">Tamaño del Grano (mm):</label>
                             <input type="number" step="0.1" id="tamano_grano_mm" required>
-                </div>
-                <div class="form-group">
-                    <label for="color_grano">Color del Grano:</label>
-                    <input type="text" id="color_grano" required>
-                </div>
-                <div class="form-group">
-                    <label for="forma_grano">Forma del Grano:</label>
-                    <input type="text" id="forma_grano" required>
-                </div>
-                <div class="form-group">
-                    <label for="calidad">Calidad:</label>
-                    <select id="calidad" required>
-                        <option value="Excelente">Excelente</option>
-                        <option value="Bueno">Bueno</option>
-                        <option value="Regular">Regular</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="imagen_url">URL de la Imagen del Grano:</label>
-                    <input type="url" id="imagen_url" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="color_grano">Color del Grano:</label>
+                            <input type="text" id="color_grano" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="forma_grano">Forma del Grano:</label>
+                            <input type="text" id="forma_grano" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="calidad">Calidad:</label>
+                            <select id="calidad" required>
+                                <option value="">Selecciona la calidad</option>
+                                <option value="Excelente">Excelente</option>
+                                <option value="Bueno">Bueno</option>
+                                <option value="Regular">Regular</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="imagen_url">URL de la Imagen del Grano:</label>
+                            <input type="url" id="imagen_url" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Información Adicional -->
+                    <div class="form-section">
+                        <h3>📊 Información Adicional</h3>
+                        <div class="form-group">
+                            <label for="region">Región:</label>
+                            <select id="region" required>
+                                <option value="">Selecciona la región</option>
+                                <option value="Huila">Huila</option>
+                                <option value="Nariño">Nariño</option>
+                                <option value="Antioquia">Antioquia</option>
+                                <option value="Eje Cafetero">Eje Cafetero</option>
+                                <option value="Santander">Santander</option>
+                                <option value="Cauca">Cauca</option>
+                                <option value="Tolima">Tolima</option>
+                                <option value="Valle del Cauca">Valle del Cauca</option>
+                                <option value="Caldas">Caldas</option>
+                                <option value="Quindío">Quindío</option>
+                                <option value="Risaralda">Risaralda</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sabor">Sabor:</label>
+                            <input type="text" id="sabor" placeholder="Ej: Dulce con notas achocolatadas" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="altitud_optima">Altitud Óptima (msnm):</label>
+                            <input type="number" id="altitud_optima" min="500" max="2500" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="resistencia">Resistencia:</label>
+                            <select id="resistencia" required>
+                                <option value="">Selecciona el tipo de resistencia</option>
+                                <option value="Resistente a Roya">Resistente a Roya</option>
+                                <option value="Resistente a Plagas">Resistente a Plagas</option>
+                                <option value="Resistente a Sequía">Resistente a Sequía</option>
+                                <option value="Alta Resistencia">Alta Resistencia</option>
+                                <option value="Media Resistencia">Media Resistencia</option>
+                                <option value="Baja Resistencia">Baja Resistencia</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="densidad_plantacion">Densidad de Plantación (plantas/ha):</label>
+                            <input type="number" id="densidad_plantacion" min="1000" max="10000" value="5000" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="requerimiento_nutricion">Requerimiento de Nutrición:</label>
+                            <select id="requerimiento_nutricion" required>
+                                <option value="">Selecciona el requerimiento</option>
+                                <option value="Alto">Alto</option>
+                                <option value="Medio">Medio</option>
+                                <option value="Bajo">Bajo</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="desde_anhos">Tiempo de Crecimiento - Desde (años):</label>
+                            <input type="number" id="desde_anhos" min="1" max="10" value="2" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="hasta_anhos">Tiempo de Crecimiento - Hasta (años):</label>
+                            <input type="number" id="hasta_anhos" min="2" max="15" value="5" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Agregar Variedad</button>
+                    </form>
                 </div>
             </div>
-            
-            <!-- Información Adicional -->
-            <div class="form-section">
-                <h3>📊 Información Adicional</h3>
-                <div class="form-group">
-                    <label for="region">Región:</label>
-                    <input type="text" id="region" required>
-                </div>
-                <div class="form-group">
-                    <label for="sabor">Sabor:</label>
-                    <input type="text" id="sabor" required>
-                </div>
-                <div class="form-group">
-                    <label for="altitud_optima">Altitud Óptima (msnm):</label>
-                    <input type="number" id="altitud_optima" required>
-                </div>
-                <div class="form-group">
-                    <label for="resistencia">Resistencia:</label>
-                    <input type="text" id="resistencia" required>
-                </div>
-            </div>
-            
-            <button type="submit" class="submit-btn">Agregar Variedad</button>
-        </form>
-    </div>
-</div>
 
         <!-- Modal para agregar nuevo producto -->
         <div class="modal" id="deleteProductModal">
@@ -644,62 +710,76 @@ curl_close($ch);
             </div>
         </div>
     </div>
+
+    <!-- Scripts -->
     <script>
-  const map = L.map('map').setView([4.5, -74.2], 6); // Centro de Colombia
+        // Inicialización del mapa
+        function initializeMap() {
+            try {
+                const map = L.map('map').setView([4.5, -74.2], 6); // Centro de Colombia
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
-  }).addTo(map);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap contributors'
+                }).addTo(map);
 
-  // Definir el emoji como ícono HTML
-  const iconEmoji = (emoji = "📍") => L.divIcon({
-    html: `<div style="font-size: 1.8rem;">${emoji}</div>`,
-    className: '',
-    iconSize: [24, 24]
-  });
+                // Definir el emoji como ícono HTML
+                const iconEmoji = (emoji = "📍") => L.divIcon({
+                    html: `<div style="font-size: 1.8rem;">${emoji}</div>`,
+                    className: '',
+                    iconSize: [24, 24]
+                });
 
-  // Zonas cafeteras
-  const zonasCafeteras = [
-    {
-      nombre: "Huila",
-      tipoCafe: "Café suave y balanceado",
-      coords: [2.5359, -75.5277]
-    },
-    {
-      nombre: "Nariño",
-      tipoCafe: "Notas cítricas y dulces",
-      coords: [1.2891, -77.3579]
-    },
-    {
-      nombre: "Antioquia",
-      tipoCafe: "Cuerpo medio, notas a chocolate",
-      coords: [6.2518, -75.5636]
-    },
-    {
-      nombre: "Santander",
-      tipoCafe: "Aroma intenso, acidez media",
-      coords: [7.1254, -73.1198]
-    },
-    {
-      nombre: "Cauca",
-      tipoCafe: "Dulce, floral y frutal",
-      coords: [2.4448, -76.6147]
-    },
-    {
-      nombre: "Tolima",
-      tipoCafe: "Acidez media y buen cuerpo",
-      coords: [4.4389, -75.2322]
-    }
-  ];
+                // Zonas cafeteras
+                const zonasCafeteras = [
+                    {
+                        nombre: "Huila",
+                        tipoCafe: "Café suave y balanceado",
+                        coords: [2.5359, -75.5277]
+                    },
+                    {
+                        nombre: "Nariño",
+                        tipoCafe: "Notas cítricas y dulces",
+                        coords: [1.2891, -77.3579]
+                    },
+                    {
+                        nombre: "Antioquia",
+                        tipoCafe: "Cuerpo medio, notas a chocolate",
+                        coords: [6.2518, -75.5636]
+                    },
+                    {
+                        nombre: "Santander",
+                        tipoCafe: "Aroma intenso, acidez media",
+                        coords: [7.1254, -73.1198]
+                    },
+                    {
+                        nombre: "Cauca",
+                        tipoCafe: "Dulce, floral y frutal",
+                        coords: [2.4448, -76.6147]
+                    },
+                    {
+                        nombre: "Tolima",
+                        tipoCafe: "Acidez media y buen cuerpo",
+                        coords: [4.4389, -75.2322]
+                    }
+                ];
 
-  // Agregar cada marcador con emoji
-  zonasCafeteras.forEach(zona => {
-    L.marker(zona.coords, { icon: iconEmoji("📍") })
-      .addTo(map)
-      .bindPopup(`<strong>${zona.nombre}</strong><br>${zona.tipoCafe}`);
-  });
-</script>
+                // Agregar cada marcador con emoji
+                zonasCafeteras.forEach(zona => {
+                    L.marker(zona.coords, { icon: iconEmoji("📍") })
+                        .addTo(map)
+                        .bindPopup(`<strong>${zona.nombre}</strong><br>${zona.tipoCafe}`);
+                });
+            } catch (error) {
+                console.error('Error inicializando el mapa:', error);
+            }
+        }
 
+        // Inicializar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar el mapa después de un pequeño delay
+            setTimeout(initializeMap, 100);
+        });
+    </script>
     
     <script src="../../frontend/js/pagina_admi.js"></script>
 </body>

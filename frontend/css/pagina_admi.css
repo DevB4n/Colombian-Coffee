@@ -972,7 +972,6 @@ body {
     box-shadow: 0 6px 20px rgba(0,0,0,0.3);
 }
 
-
 /* Estilos para el formulario de agregar producto */
 .form-section {
     margin-bottom: 25px;
@@ -1029,4 +1028,338 @@ select:focus {
         width: 95%;
         margin: 10% auto;
     }
+}
+/* Correcciones específicas para el modal de agregar producto */
+
+/* Modal de agregar producto - contenedor principal */
+#addProductModal .modal-content {
+    max-width: 800px;
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    margin: 2% auto;
+    position: relative;
+    
+    /* Scroll personalizado */
+    scrollbar-width: thin;
+    scrollbar-color: #8B4513 #f1f1f1;
+}
+
+/* Webkit scrollbar para navegadores basados en Chromium */
+#addProductModal .modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+#addProductModal .modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+#addProductModal .modal-content::-webkit-scrollbar-thumb {
+    background: #8B4513;
+    border-radius: 4px;
+}
+
+#addProductModal .modal-content::-webkit-scrollbar-thumb:hover {
+    background: #D2691E;
+}
+
+/* Mejorar el espaciado de las secciones del formulario */
+.form-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(139, 69, 19, 0.05), rgba(210, 105, 30, 0.05));
+    border-radius: 12px;
+    border-left: 4px solid #8B4513;
+    border-bottom: 1px solid rgba(139, 69, 19, 0.1);
+}
+
+.form-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 20px;
+}
+
+.form-section h3 {
+    color: #8B4513;
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(139, 69, 19, 0.2);
+}
+
+/* Mejorar campos del formulario */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #654321;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #8B4513;
+    box-shadow: 0 0 8px rgba(139, 69, 19, 0.3);
+    background-color: #fefefe;
+}
+
+.form-group input:invalid,
+.form-group textarea:invalid,
+.form-group select:invalid {
+    border-color: #ff6b6b;
+}
+
+.form-group input:valid,
+.form-group textarea:valid,
+.form-group select:valid {
+    border-color: #4CAF50;
+}
+
+/* Textarea específico */
+textarea {
+    font-family: 'Arial', sans-serif;
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.5;
+}
+
+/* Select personalizado */
+select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23654321' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 40px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+/* Botón de envío mejorado */
+.submit-btn {
+    width: 100%;
+    background: linear-gradient(45deg, #8B4513, #D2691E);
+    color: white;
+    border: none;
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 20px;
+}
+
+.submit-btn:hover {
+    background: linear-gradient(45deg, #A0522D, #FF8C00);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 69, 19, 0.4);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(139, 69, 19, 0.3);
+}
+
+/* Botón de cerrar modal mejorado */
+.close-btn {
+    color: #8B4513;
+    float: right;
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    line-height: 1;
+    position: sticky;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.close-btn:hover {
+    color: #D2691E;
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Título del modal */
+#addProductModal h2 {
+    color: #8B4513;
+    margin-bottom: 25px;
+    text-align: center;
+    font-size: 1.8rem;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #D2691E;
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.95);
+    z-index: 999;
+    margin-top: -10px;
+    padding-top: 10px;
+}
+
+/* Responsive para dispositivos móviles */
+@media (max-width: 768px) {
+    #addProductModal .modal-content {
+        width: 98%;
+        margin: 1% auto;
+        max-height: 95vh;
+        border-radius: 8px;
+    }
+    
+    .form-section {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .form-section h3 {
+        font-size: 1.2rem;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        padding: 10px 12px;
+        font-size: 16px; /* Previene zoom en iOS */
+    }
+    
+    .submit-btn {
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+    
+    #addProductModal h2 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    #addProductModal .modal-content {
+        width: 100%;
+        margin: 0;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+    
+    .form-section {
+        padding: 12px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+    }
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .form-group label {
+        font-size: 0.9rem;
+        margin-bottom: 6px;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        padding: 8px 10px;
+    }
+}
+
+/* Indicadores visuales para campos requeridos */
+.form-group label::after {
+    content: " *";
+    color: #ff6b6b;
+    font-weight: bold;
+}
+
+/* Animación para campos con error */
+.form-group.error input,
+.form-group.error textarea,
+.form-group.error select {
+    animation: shake 0.5s ease-in-out;
+    border-color: #ff6b6b;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Mensaje de carga en el botón */
+.submit-btn.loading {
+    background: linear-gradient(45deg, #999, #666);
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.submit-btn.loading::after {
+    content: " ⏳";
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Spinner para botón de carga */
+.spinner {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Mejoras en los mensajes de error */
+.notification-error {
+    background: linear-gradient(45deg, #ff4d4d, #cc0000) !important;
+}
+
+/* Validación de campos */
+input:invalid, select:invalid, textarea:invalid {
+    border-color: #ff6b6b !important;
+}
+
+input:valid, select:valid, textarea:valid {
+    border-color: #4CAF50 !important;
 }
