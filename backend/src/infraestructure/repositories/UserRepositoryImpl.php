@@ -29,4 +29,18 @@ class UserRepositoryImpl implements UserRepository {
 
         return null;
     }
+
+    public function create(string $email, string $username, string $password): User {
+    $stmt = $this->pdo->prepare("INSERT INTO usuarios (email, username, password) VALUES (:email, :username, :password)");
+    $stmt->execute([
+        'email' => $email,
+        'username' => $username,
+        'password' => $password
+    ]);
+
+    $id = $this->pdo->lastInsertId();
+
+    return new User($id, $username, $email, $password);
+}
+
 }

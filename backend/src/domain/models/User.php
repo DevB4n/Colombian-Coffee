@@ -8,12 +8,14 @@ class User {
     public $password;
     public $username;
 
-    public function __construct($id, $email, $password, $username) {
-        $this->id = $id;
-        $this->email = $email;
-        $this->password = $password;
-        $this->username = $username;
-    }
+        // backend/domain/models/User.php
+public function __construct($id, $username, $email, $password) {
+    $this->id = $id;
+    $this->username = $username;
+    $this->email = $email;
+    $this->password = $password;
+}
+
 
     public function getPassword() {
         return $this->password;
