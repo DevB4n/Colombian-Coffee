@@ -1,4 +1,4 @@
--- Active: 1753874258507@@127.0.0.1@3306@coffee
+-- Active: 1754307429048@@127.0.0.1@3306@coffee
 
 -- Datase connection
 
@@ -249,3 +249,4 @@ VALUES
 (4, 4, 7, 5, 700.00, 4),   -- Robusta comun en Santander, sabor Terroso
 (5, 5, 8, 6, 750.00, 5),   -- Robusta congoles en Valle del Cauca, sabor Amargo
 (6, 6, 9, 5, 1700.00, 6);  -- Clon 500 en Quindío, sabor Terroso
+
