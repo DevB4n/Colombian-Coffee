@@ -202,6 +202,7 @@ curl_close($ch);
                     <h3>🌟 Nuestras Variedades Destacadas</h3>
                     <p>Explora las características únicas de cada variedad de café colombiano</p>
                     <button class="btn-add-product" id="btnAddProduct">➕ Agregar Nuevo Producto</button>
+                    <button id="btnOpenDeleteModal" class="btn-delete">🗑️ Eliminar Variedad</button>
                 </div>
                 
                 <!-- Y AGREGA ESTA NUEVA SECCIÓN DE BÚSQUEDA Y FILTROS -->
@@ -500,7 +501,8 @@ curl_close($ch);
                 </form>
             </div>
                 </div>
-                <!-- Modal para agregar nuevo producto -->
+
+        <!-- Modal para agregar nuevo producto -->
         <div class="modal" id="addProductModal">
             <div class="modal-content">
                 <span class="close-btn" id="closeAddProductModal">&times;</span>
@@ -585,6 +587,36 @@ curl_close($ch);
         </form>
     </div>
 </div>
+
+        <!-- Modal para agregar nuevo producto -->
+        <div class="modal" id="deleteProductModal">
+            <div class="modal-content">
+                <span class="close-btn" id="closeDeleteProductModal">&times;</span>
+                <h2>🗑️ Eliminar Variedad de Café</h2>
+                <form id="deleteProductForm">
+                    <div class="form-group">
+                        <label for="delete_table">Tabla a eliminar:</label>
+                        <select id="delete_table" required>
+                            <option value="">Seleccione una tabla</option>
+                            <option value="planta">Planta</option>
+                            <option value="grano">Grano</option>
+                            <option value="region">Región</option>
+                            <option value="sabor">Sabor</option>
+                            <option value="tiempo_crecimiento">Tiempo de Crecimiento</option>
+                            <option value="datos_cafe">Datos del Café</option>
+                            <option value="cafe">Café (completo)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="delete_id">ID del registro:</label>
+                        <input type="number" id="delete_id" placeholder="Ingrese el ID" required>
+                    </div>
+
+                    <button type="submit" class="btn-delete">✖️ Eliminar</button>
+                </form>
+            </div>
+        </div>
         
         <div class="modal" id="registerModal">
             <div class="modal-content">

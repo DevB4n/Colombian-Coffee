@@ -818,6 +818,66 @@ if (addProductForm) {
     });
 }
 
+// Elementos del DOM
+const btnOpenDeleteModal = document.getElementById('btnOpenDeleteModal'); // botón para abrir modal (si lo tienes)
+const deleteProductModal = document.getElementById('deleteProductModal');
+const closeDeleteProductModal = document.getElementById('closeDeleteProductModal');
+const deleteProductForm = document.getElementById('deleteProductForm');
+
+// Mostrar modal si tienes un botón específico
+if (btnOpenDeleteModal) {
+    btnOpenDeleteModal.addEventListener('click', () => {
+        showModal(deleteProductModal);
+    });
+}
+
+// Cerrar modal
+if (closeDeleteProductModal) {
+    closeDeleteProductModal.addEventListener('click', () => {
+        hideModal(deleteProductModal);
+    });
+}
+
+// Enviar formulario de eliminación
+if (deleteProductForm) {
+    deleteProductForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const table = document.getElementById('delete_table').value;
+        const id = document.getElementById('delete_id').value;
+
+        if (!table || !id) {
+            showNotification('Por favor complete todos los campos', 'error');
+            return;
+        }
+
+        const confirmed = confirm(`¿Deseas eliminar el registro con ID ${id} de la tabla ${table}?`);
+        if (!confirmed) return;
+
+        fetch(`http://localhost:8081/caracteristicas_cafe/delete?table=${table}&id=${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': 'Basic ' + btoa('Adrian@gmail.com:soylacontra')
+            }
+        })
+        .then(response => response.json().then(data => ({ status: response.status, body: data })))
+        .then(({ status, body }) => {
+            if (status === 200) {
+                showNotification(body.message, 'success');
+                hideModal(deleteProductModal);
+                deleteProductForm.reset();
+                setTimeout(() => location.reload(), 1500);
+            } else {
+                showNotification(body.error || body.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            showNotification('Error al eliminar: ' + error.message, 'error');
+        });
+    });
+}
+
 // Agrega esta función para manejar el envío del formulario
 function handleAddProduct() {
     // Obtener los valores del formulario
@@ -888,3 +948,42 @@ function handleAddProduct() {
         showNotification('Error al agregar la nueva variedad: ' + error.message, 'error');
     });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const btnDelete = document.getElementById('btnDelete');
+
+    if (btnDelete) {
+        btnDelete.addEventListener('click', () => {
+            const id = btnDelete.dataset.id;
+            const table = btnDelete.dataset.table;
+
+            if (!id || !table) {
+                showNotification('Faltan datos para eliminar (id o tabla)', 'error');
+                return;
+            }
+
+            const confirmDelete = confirm(`¿Seguro que deseas eliminar el elemento de la tabla "${table}" con ID ${id}?`);
+            if (!confirmDelete) return;
+
+            fetch(`http://localhost:8081/caracteristicas_cafe/delete?table=${table}&id=${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': 'Basic ' + btoa('Adrian@gmail.com:soylacontra')
+                }
+            })
+            .then(response => response.json().then(data => ({ status: response.status, body: data })))
+            .then(({ status, body }) => {
+                if (status === 200) {
+                    showNotification(body.message || 'Eliminado con éxito', 'success');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    showNotification(body.error || 'No se pudo eliminar', 'error');
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                showNotification('Error al eliminar: ' + error.message, 'error');
+            });
+        });
+    }
+});

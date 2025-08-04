@@ -953,6 +953,26 @@ body {
     box-shadow: 0 6px 20px rgba(0,0,0,0.3);
 }
 
+/* Botón Eliminar Producto */
+.btn-delete {
+    background: linear-gradient(45deg, #f44336, #d32f2f);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+.btn-delete:hover {
+    background: linear-gradient(45deg, #d32f2f, #b71c1c);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+
 /* Estilos para el formulario de agregar producto */
 .form-section {
     margin-bottom: 25px;
