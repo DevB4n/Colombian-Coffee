@@ -216,21 +216,6 @@ function initializeEvents() {
         });
     }
 
-    // Eventos de formularios
-    if (userForm) {
-        userForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            handleUserLogin();
-        });
-    }
-
-    if (adminForm) {
-        adminForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            handleAdminLogin();
-        });
-    }
-
     if (registerForm) {
         registerForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -860,34 +845,6 @@ function handleDeleteProduct() {
     });
 }
 
-// Los eventos de eliminación se manejan en initializeUpdateDeleteModals()
-
-// Código duplicado eliminado - los eventos se manejan en las funciones principales
-
-// Funciones de manejo de formularios
-function handleUserLogin() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    
-    if (validateLoginForm(username, password)) {
-        console.log('Intento de login de usuario:', { username, password });
-        showNotification('Ingreso exitoso como usuario', 'success');
-        hideModal(userModal);
-        showCoffeeCatalog();
-    }
-}   
-
-function handleAdminLogin() {
-    const adminUsername = document.getElementById('adminUsername').value;
-    const adminPassword = document.getElementById('adminPassword').value;
-    
-    if (validateLoginForm(adminUsername, adminPassword)) {
-        console.log('Intento de login de admin:', { adminUsername, adminPassword });
-        showNotification('Ingreso exitoso como administrador', 'success');
-        hideModal(adminModal);
-        showCoffeeCatalog();
-    }
-}
 
 function handleUserRegistration() {
     const newUsername = document.getElementById('newUsername').value;

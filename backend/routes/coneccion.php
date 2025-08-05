@@ -1,14 +1,32 @@
 <?php
+require_once 'auth.php';
+
+// Verificar autenticación
+if (!isAuthenticated()) {
+    header('Location: index.php?error=unauthorized');
+    exit();
+}
+
+// Verificar que sea un usuario (no admin)
+if (getUserRole() !== 'user') {
+    header('Location: adminadd.php');
+    exit();
+}
+
+// Obtener credenciales de API
+$apiCredentials = getApiCredentials();
 $apiUrl = 'http://localhost:8081/caracteristicas_cafe';
-$username = "Adrian@gmail.com";
-$password = "soylacontra";
+$api_username = $apiCredentials['username'];
+$api_password = $apiCredentials['password'];
 $variedades = [];
 $error = null;
 
 // Realizar la petición a la API
 $ch = curl_init($apiUrl);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_USERPWD, "$username:$password");
+curl_setopt($ch, CURLOPT_USERPWD, "$api_username:$api_password");
+curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 $response = curl_exec($ch);
 
 if (curl_errno($ch)) {
@@ -33,7 +51,6 @@ curl_close($ch);
     <link rel="stylesheet" href="../../frontend/css/pagina_principal.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
 </head>
 <body>
     <div class="container">
@@ -41,25 +58,13 @@ curl_close($ch);
             <source src="img/Comerciales Colcafé - Consiéntete, date gusto con un Colcafé Clásico.mp4" type="video/mp4">
         </video>
         
-        <div class="overlay" id="overlay">
-            <div class="header">
-                <h1>☕ Catálogo de Café</h1>
-                <p>Descubre las mejores variedades de café colombiano</p>
-            </div>
-            
-            <button class="btn-enter" id="btnEnter">ENTRAR</button>
-            
-            <div class="login-options" id="loginOptions">
-                <button class="login-btn" id="userLogin">Ingresar como Usuario</button>
-                <button class="login-btn" id="adminLogin">Ingresar como Administrador</button>
-            </div>
-        </div>
-
         <!-- Catálogo de Café -->
-        <div class="cafe-catalog" id="cafeCatalog">
+        <div class="cafe-catalog" id="cafeCatalog" style="display: block;">
             <div class="catalog-header">
                 <h2>🌱 Variedades de Café Colombiano</h2>
-                <button class="btn-back" id="btnBack">← Volver al Inicio</button>
+                <div class="header-buttons">
+                    <a href="auth.php?logout=1" class="btn-logout" style="background: linear-gradient(45deg, #6B4423, #8B4513); color: white; padding: 10px 20px; border-radius: 20px; text-decoration: none; margin-left: 10px;">Cerrar Sesión</a>
+                </div>
             </div>
 
             <!-- Sección de Información del Café -->
@@ -93,13 +98,13 @@ curl_close($ch);
                         <div class="stat-label">Metros de Altitud</div>
                     </div>
                 </div>
+                
                 <div class="coffee-map-section" style="margin-bottom: 40px;">
                     <h4 class="map-title" style="color: #FFD700; text-align: center; font-size: 1.8rem; margin-bottom: 20px;">
                         📍 Regiones donde se cultiva nuestro café
                     </h4>
                     <div id="map" style="height: 450px; border-radius: 15px; overflow: hidden; border: 2px solid #D2691E;"></div>
                 </div>
-
 
                 <div class="curiosities-section">
                     <h4>🤔 ¿Sabías que...?</h4>
@@ -162,7 +167,6 @@ curl_close($ch);
                 <div class="quality-indicators">
                       <h4>Indicadores de calidad</h4>
                       <div class="quality-grid">
-
                         <div class="quality-item" data-region="Huila" data-info="Café suave, con notas dulces y cuerpo medio.">
                           <div class="quality-icon">🌱</div>
                           <div class="quality-content">
@@ -170,7 +174,6 @@ curl_close($ch);
                             <p>Entre 1200 y 1800 msnm</p>
                           </div>
                         </div>
-
                         <div class="quality-item" data-region="Nariño" data-info="Café con notas cítricas y dulces gracias a la altura.">
                           <div class="quality-icon">🌤️</div>
                           <div class="quality-content">
@@ -178,7 +181,6 @@ curl_close($ch);
                             <p>18°C a 22°C</p>
                           </div>
                         </div>
-
                         <div class="quality-item" data-region="Antioquia" data-info="Café con cuerpo medio y sabor achocolatado.">
                           <div class="quality-icon">🌾</div>
                           <div class="quality-content">
@@ -186,10 +188,8 @@ curl_close($ch);
                             <p>Volcánico y fértil</p>
                           </div>
                         </div>
-
                       </div> 
                     </div>
-
             </div>
 
             <?php if ($error): ?>
@@ -203,14 +203,7 @@ curl_close($ch);
                     <p>Explora las características únicas de cada variedad de café colombiano</p>
                 </div>
                 
-                <!-- 🔥 AQUÍ ES DONDE REEMPLAZAS LA SECCIÓN ANTIGUA 🔥 -->
-                <!-- ELIMINA ESTAS LÍNEAS:
-                <div class="search-variety" style="text-align: center; margin-bottom: 30px;">
-                    <input type="text" id="searchInput" placeholder="Buscar variedad de café (ej. Castillo) 🔎" style="padding: 12px 20px; border-radius: 20px; border: 2px solid #D2691E; font-size: 1rem; width: 80%; max-width: 500px;">
-                </div>
-                -->
-                
-                <!-- Y AGREGA ESTA NUEVA SECCIÓN DE BÚSQUEDA Y FILTROS -->
+                <!-- Sección de búsqueda y filtros -->
                 <div class="search-filter-section" style="max-width: 1200px; margin: 0 auto 40px; padding: 20px;">
                     <div class="search-filter-container" style="background: linear-gradient(135deg, rgba(139, 69, 19, 0.9), rgba(210, 105, 30, 0.9)); border-radius: 20px; padding: 30px; backdrop-filter: blur(10px); border: 2px solid rgba(255, 215, 0, 0.3);">
                         
@@ -468,129 +461,62 @@ curl_close($ch);
                 </div>
             </div>
         </div>
-        
-        <!-- Modales originales del login -->
-        <div class="modal" id="userModal">
-            <div class="modal-content">
-                <span class="close-btn" id="closeUserModal">&times;</span>
-                <h2>Ingreso de Usuario</h2>
-                <form id="userForm">
-                    <div class="form-group">
-                        <label for="username">Usuario:</label>
-                        <input type="text" id="username" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Contraseña:</label>
-                        <input type="password" id="password" required>
-                    </div>
-                    <button type="submit" class="submit-btn">Ingresar</button>
-                    <p>¿No tienes cuenta? <a href="#" id="registerLink">Regístrate aquí</a></p>
-                </form>
-            </div>
-        </div>
-        
-        <div class="modal" id="adminModal">
-            <div class="modal-content">
-                <span class="close-btn" id="closeAdminModal">&times;</span>
-                <h2>Ingreso de Administrador</h2>
-                <form id="adminForm">
-                    <div class="form-group">
-                        <label for="adminUsername">Usuario:</label>
-                        <input type="text" id="adminUsername" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="adminPassword">Contraseña:</label>
-                        <input type="password" id="adminPassword" required>
-                    </div>
-                    <button type="submit" class="submit-btn">Ingresar</button>
-                </form>
-            </div>
-        </div>
-        
-        <div class="modal" id="registerModal">
-            <div class="modal-content">
-                <span class="close-btn" id="closeRegisterModal">&times;</span>
-                <h2>Registro de Usuario</h2>
-                <form id="registerForm">
-                    <div class="form-group">
-                        <label for="newUsername">Usuario:</label>
-                        <input type="text" id="newUsername" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Correo Electrónico:</label>
-                        <input type="email" id="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="newPassword">Contraseña:</label>
-                        <input type="password" id="newPassword" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="confirmPassword">Confirmar Contraseña:</label>
-                        <input type="password" id="confirmPassword" required>
-                    </div>
-                    <button type="submit" class="submit-btn">Registrarse</button>
-                </form>
-            </div>
-        </div>
     </div>
+    
     <script>
-  const map = L.map('map').setView([4.5, -74.2], 6); // Centro de Colombia
+        const map = L.map('map').setView([4.5, -74.2], 6); // Centro de Colombia
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
-  }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
 
-  // Definir el emoji como ícono HTML
-  const iconEmoji = (emoji = "📍") => L.divIcon({
-    html: `<div style="font-size: 1.8rem;">${emoji}</div>`,
-    className: '',
-    iconSize: [24, 24]
-  });
+        // Definir el emoji como ícono HTML
+        const iconEmoji = (emoji = "📍") => L.divIcon({
+            html: `<div style="font-size: 1.8rem;">${emoji}</div>`,
+            className: '',
+            iconSize: [24, 24]
+        });
 
-  // Zonas cafeteras
-  const zonasCafeteras = [
-    {
-      nombre: "Huila",
-      tipoCafe: "Café suave y balanceado",
-      coords: [2.5359, -75.5277]
-    },
-    {
-      nombre: "Nariño",
-      tipoCafe: "Notas cítricas y dulces",
-      coords: [1.2891, -77.3579]
-    },
-    {
-      nombre: "Antioquia",
-      tipoCafe: "Cuerpo medio, notas a chocolate",
-      coords: [6.2518, -75.5636]
-    },
-    {
-      nombre: "Santander",
-      tipoCafe: "Aroma intenso, acidez media",
-      coords: [7.1254, -73.1198]
-    },
-    {
-      nombre: "Cauca",
-      tipoCafe: "Dulce, floral y frutal",
-      coords: [2.4448, -76.6147]
-    },
-    {
-      nombre: "Tolima",
-      tipoCafe: "Acidez media y buen cuerpo",
-      coords: [4.4389, -75.2322]
-    }
-  ];
+        // Zonas cafeteras
+        const zonasCafeteras = [
+            {
+                nombre: "Huila",
+                tipoCafe: "Café suave y balanceado",
+                coords: [2.5359, -75.5277]
+            },
+            {
+                nombre: "Nariño",
+                tipoCafe: "Notas cítricas y dulces",
+                coords: [1.2891, -77.3579]
+            },
+            {
+                nombre: "Antioquia",
+                tipoCafe: "Cuerpo medio, notas a chocolate",
+                coords: [6.2518, -75.5636]
+            },
+            {
+                nombre: "Santander",
+                tipoCafe: "Aroma intenso, acidez media",
+                coords: [7.1254, -73.1198]
+            },
+            {
+                nombre: "Cauca",
+                tipoCafe: "Dulce, floral y frutal",
+                coords: [2.4448, -76.6147]
+            },
+            {
+                nombre: "Tolima",
+                tipoCafe: "Acidez media y buen cuerpo",
+                coords: [4.4389, -75.2322]
+            }
+        ];
 
-  // Agregar cada marcador con emoji
-  zonasCafeteras.forEach(zona => {
-    L.marker(zona.coords, { icon: iconEmoji("📍") })
-      .addTo(map)
-      .bindPopup(`<strong>${zona.nombre}</strong><br>${zona.tipoCafe}`);
-  });
-
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script>
+        // Agregar cada marcador con emoji
+        zonasCafeteras.forEach(zona => {
+            L.marker(zona.coords, { icon: iconEmoji("📍") })
+                .addTo(map)
+                .bindPopup(`<strong>${zona.nombre}</strong><br>${zona.tipoCafe}`);
+        });
 
 // ===========================================
 // SCRIPT PARA GENERAR PDF DEL CATÁLOGO DE CAFÉ
@@ -1071,7 +997,7 @@ function addDownloadButton() {
         border-radius: 25px;
         cursor: pointer;
         font-size: 1rem;
-        margin: 10px;
+        margin: 40px 0px;
         transition: all 0.3s ease;
         box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         font-weight: bold;
@@ -1156,5 +1082,10 @@ if (document.readyState === 'loading') {
 
 
 <script src="../../frontend/js/pagina_principal.js"></script>
+</body>
+</html>
+    </script>
+    
+    <script src="../../frontend/js/pagina_principal.js"></script>
 </body>
 </html>
