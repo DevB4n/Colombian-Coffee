@@ -13,6 +13,6 @@ class Region extends Model
 
     public function pais()
     {
-        return $this->belongsTo(Country::class);
+        return $this->belongsTo(Country::class, 'pais_id');
     }
 }

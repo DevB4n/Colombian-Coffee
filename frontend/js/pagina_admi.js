@@ -38,6 +38,24 @@ document.addEventListener('DOMContentLoaded', function() {
     if (videoBackground) {
         videoBackground.play().catch(function(error) {
             console.log('No se pudo reproducir el video automáticamente:', error);
+            // Intentar con el video de respaldo
+            const sources = videoBackground.querySelectorAll('source');
+            if (sources.length > 1) {
+                videoBackground.load();
+                videoBackground.play().catch(function(secondError) {
+                    console.log('No se pudo reproducir el video de respaldo:', secondError);
+                    // Ocultar el video si no se puede reproducir
+                    videoBackground.style.display = 'none';
+                });
+            } else {
+                videoBackground.style.display = 'none';
+            }
+        });
+        
+        // Manejar errores de carga del video
+        videoBackground.addEventListener('error', function(e) {
+            console.log('Error al cargar el video:', e);
+            videoBackground.style.display = 'none';
         });
     }
     
@@ -49,6 +67,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Inicializar filtros
     initializeFilters();
+    
+    // Inicializar modales de actualización y eliminación
+    initializeUpdateDeleteModals();
 });
 
 // Función para inicializar elementos del modal de agregar producto
@@ -57,6 +78,59 @@ function initializeAddProductElements() {
     addProductModal = document.getElementById('addProductModal');
     closeAddProductModal = document.getElementById('closeAddProductModal');
     addProductForm = document.getElementById('addProductForm');
+}
+
+// Función para inicializar modales de actualización y eliminación
+function initializeUpdateDeleteModals() {
+    const updateModal = document.getElementById('updateProductModal');
+    const openUpdateBtn = document.getElementById('btnOpenUpdateModal');
+    const closeUpdateBtn = document.getElementById('closeUpdateProductModal');
+    const updateProductForm = document.getElementById('updateProductForm');
+
+    const deleteModal = document.getElementById('deleteProductModal');
+    const openDeleteBtn = document.getElementById('btnOpenDeleteModal');
+    const closeDeleteBtn = document.getElementById('closeDeleteProductModal');
+    const deleteProductForm = document.getElementById('deleteProductForm');
+
+    // Eventos para modal de actualización
+    if (openUpdateBtn && updateModal) {
+        openUpdateBtn.addEventListener('click', () => {
+            showModal(updateModal);
+        });
+    }
+
+    if (closeUpdateBtn && updateModal) {
+        closeUpdateBtn.addEventListener('click', () => {
+            hideModal(updateModal);
+        });
+    }
+
+    if (updateProductForm) {
+        updateProductForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleUpdateProduct();
+        });
+    }
+
+    // Eventos para modal de eliminación
+    if (openDeleteBtn && deleteModal) {
+        openDeleteBtn.addEventListener('click', () => {
+            showModal(deleteModal);
+        });
+    }
+
+    if (closeDeleteBtn && deleteModal) {
+        closeDeleteBtn.addEventListener('click', () => {
+            hideModal(deleteModal);
+        });
+    }
+
+    if (deleteProductForm) {
+        deleteProductForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleDeleteProduct();
+        });
+    }
 }
 
 // Función para inicializar todos los eventos
@@ -178,29 +252,7 @@ function initializeEvents() {
         }
     });
 
-    const registerForm = document.getElementById('registerForm');
-    if (registerForm) {
-        registerForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            handleUserRegistration();
-        });
-    }
-
-    const deleteProductForm = document.getElementById('deleteProductForm');
-    if (deleteProductForm) {
-        deleteProductForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            handleDeleteProduct();
-        });
-    }
-
-    const updateProductForm = document.getElementById('updateProductForm');
-    if (updateProductForm) {
-        updateProductForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            handleUpdateProduct();
-        });
-    }
+    // Los eventos de actualización y eliminación se manejan en initializeUpdateDeleteModals()
 
     // Eventos para elementos interactivos
     initializeInteractiveElements();
@@ -600,39 +652,50 @@ function handleAddProduct() {
             }
         }
 
-        // Crear objeto con estructura exacta que espera la API
+        // Crear objeto con estructura exacta que espera la API del backend
         const apiData = {
-            grano: {
+            plant: {
+                nombre_variedad: formData.nombre_variedad,
+                especie: formData.especie,
+                nombre_comun: formData.nombre_variedad, // Campo requerido por la BD
+                tamano_planta_cm: parseInt(formData.tamano_planta_cm),
+                color_hoja: formData.color_hoja,
+                descripcion: formData.descripcion_planta,
+                imagen_url: formData.imagen_planta_url
+            },
+            grain: {
                 tamano_grano_mm: parseFloat(formData.tamano_grano_mm),
                 color_grano: formData.color_grano,
                 forma_grano: formData.forma_grano,
                 calidad: formData.calidad,
-                imagen_url: formData.imagen_url,
-                planta: {
-                    nombre_variedad: formData.nombre_variedad,
-                    especie: formData.especie,
-                    tamano_planta_cm: parseInt(formData.tamano_planta_cm),
-                    color_hoja: formData.color_hoja,
-                    descripcion: formData.descripcion_planta,
-                    imagen_url: formData.imagen_planta_url
-                }
+                imagen_url: formData.imagen_url
             },
-            region: formData.region,
-            sabor: formData.sabor,
-            altitud_optima: `${formData.altitud_optima} msnm`,
-            datos_cafe: {
+            time_growth: {
+                Desde_anhos: parseInt(formData.desde_anhos),
+                Hasta_anhos: parseInt(formData.hasta_anhos)
+            },
+            flavor: formData.sabor,
+            region: {
+                nombre: formData.region,
+                clima: 'Templado humedo', // Valor por defecto requerido
+                suelo: 'Franco arcilloso', // Valor por defecto requerido
+                pais_id: 1 // Colombia (ID 1 según los datos de ejemplo)
+            },
+            coffee_data: {
                 resistencia: formData.resistencia,
                 densidad_plantacion: parseInt(formData.densidad_plantacion),
                 requerimiento_nutricion: formData.requerimiento_nutricion,
                 primera_siembra: new Date().toISOString().split('T')[0]
             },
-            tiempo_crecimiento: {
-                Desde_anhos: parseInt(formData.desde_anhos),
-                Hasta_anhos: parseInt(formData.hasta_anhos)
-            }
+            altitud_optima: parseFloat(formData.altitud_optima) // Debe ser número, no string
         };
 
         console.log('Datos a enviar:', JSON.stringify(apiData, null, 2));
+        console.log('URL de la API:', 'http://localhost:8081/caracteristicas_cafe/post');
+        console.log('Headers:', {
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic ' + btoa('Adrian@gmail.com:soylacontra')
+        });
 
         // Configurar botón de enviar
         const submitBtn = document.querySelector('#addProductForm .submit-btn');
@@ -649,9 +712,12 @@ function handleAddProduct() {
             body: JSON.stringify(apiData)
         })
         .then(async response => {
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
             const data = await response.json();
+            console.log('Response data:', data);
             if (!response.ok) {
-                throw new Error(data.message || `Error ${response.status}`);
+                throw new Error(data.message || data.error || `Error ${response.status}`);
             }
             return data;
         })
@@ -713,7 +779,15 @@ function handleUpdateProduct() {
     submitBtn.disabled = true;
     submitBtn.innerHTML = 'Actualizando... <span class="spinner"></span>';
 
-    fetch(`http://localhost:8081/caracteristicas_cafe/${table}/${id}`, {
+    // Construir la URL correcta para la actualización
+    let updateUrl = `http://localhost:8081/caracteristicas_cafe/${table}/${id}`;
+    
+    // Si es una tabla anidada, ajustar la URL
+    if (table === 'grano' || table === 'planta' || table === 'datos_cafe' || table === 'tiempo_crecimiento') {
+        updateUrl = `http://localhost:8081/caracteristicas_cafe/${table}/${id}`;
+    }
+
+    fetch(updateUrl, {
         method: 'PATCH',
         headers: {
             'Authorization': 'Basic ' + btoa('Adrian@gmail.com:soylacontra'),
@@ -723,20 +797,23 @@ function handleUpdateProduct() {
     })
     .then(async res => {
         const json = await res.json();
-        if (!res.ok) throw new Error(json.error || 'Error desconocido');
+        if (!res.ok) {
+            console.error('Error response:', json);
+            throw new Error(json.error || json.message || `Error ${res.status}: ${res.statusText}`);
+        }
         return json;
     })
     .then(data => {
-        showNotification('Registro actualizado correctamente', 'success');
+        showNotification('✅ Registro actualizado correctamente', 'success');
         setTimeout(() => window.location.reload(), 1500);
     })
     .catch(err => {
-        console.error('Error al actualizar:', err);
-        showNotification(`Error: ${err.message}`, 'error');
+        console.error('Error completo al actualizar:', err);
+        showNotification(`❌ Error al actualizar: ${err.message}`, 'error');
     })
     .finally(() => {
         submitBtn.disabled = false;
-        submitBtn.innerHTML = 'Actualizar';
+        submitBtn.innerHTML = '✏️ Actualizar';
     });
 }
 
@@ -783,145 +860,9 @@ function handleDeleteProduct() {
     });
 }
 
-// Elementos del DOM
-const btnOpenDeleteModal = document.getElementById('btnOpenDeleteModal'); // botón para abrir modal (si lo tienes)
-const deleteProductModal = document.getElementById('deleteProductModal');
-const closeDeleteProductModal = document.getElementById('closeDeleteProductModal');
-const deleteProductForm = document.getElementById('deleteProductForm');
+// Los eventos de eliminación se manejan en initializeUpdateDeleteModals()
 
-// Mostrar modal si tienes un botón específico
-if (btnOpenDeleteModal) {
-    btnOpenDeleteModal.addEventListener('click', () => {
-        showModal(deleteProductModal);
-    });
-}
-
-// Cerrar modal
-if (closeDeleteProductModal) {
-    closeDeleteProductModal.addEventListener('click', () => {
-        hideModal(deleteProductModal);
-    });
-}
-
-// Enviar formulario de eliminación
-if (deleteProductForm) {
-    deleteProductForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const table = document.getElementById('delete_table').value;
-        const id = document.getElementById('delete_id').value;
-
-        if (!table || !id) {
-            showNotification('Por favor complete todos los campos', 'error');
-            return;
-        }
-
-        const confirmed = confirm(`¿Deseas eliminar el registro con ID ${id} de la tabla ${table}?`);
-        if (!confirmed) return;
-
-        fetch(`http://localhost:8081/caracteristicas_cafe/delete?table=${table}&id=${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': 'Basic ' + btoa('Adrian@gmail.com:soylacontra')
-            }
-        })
-        .then(response => response.json().then(data => ({ status: response.status, body: data })))
-        .then(({ status, body }) => {
-            if (status === 200) {
-                showNotification(body.message, 'success');
-                hideModal(deleteProductModal);
-                deleteProductForm.reset();
-                setTimeout(() => location.reload(), 1500);
-            } else {
-                showNotification(body.error || body.message, 'error');
-            }
-        })
-        .catch(error => {
-            console.error(error);
-            showNotification('Error al eliminar: ' + error.message, 'error');
-        });
-    });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    const btnDelete = document.getElementById('btnDelete');
-
-    if (btnDelete) {
-        btnDelete.addEventListener('click', () => {
-            const id = btnDelete.dataset.id;
-            const table = btnDelete.dataset.table;
-
-            if (!id || !table) {
-                showNotification('Faltan datos para eliminar (id o tabla)', 'error');
-                return;
-            }
-
-            const confirmDelete = confirm(`¿Seguro que deseas eliminar el elemento de la tabla "${table}" con ID ${id}?`);
-            if (!confirmDelete) return;
-
-            const formData = new URLSearchParams();
-
-            // 🌱 Planta
-            formData.append("plant[nombre_variedad]", document.getElementById("nombre_variedad").value);
-            formData.append("plant[especie]", document.getElementById("especie").value);
-            formData.append("plant[tamano_planta_cm]", document.getElementById("tamano_planta_cm").value);
-            formData.append("plant[color_hoja]", document.getElementById("color_hoja").value);
-            formData.append("plant[descripcion]", document.getElementById("descripcion_planta").value);
-
-            // 🌾 Grano
-            formData.append("grain[tamano_grano_mm]", document.getElementById("tamano_grano_mm").value);
-            formData.append("grain[color_grano]", document.getElementById("color_grano").value);
-            formData.append("grain[forma_grano]", document.getElementById("forma_grano").value);
-            formData.append("grain[calidad]", document.getElementById("calidad").value);
-            formData.append("grain[imagen_url]", document.getElementById("imagen_url").value);
-
-            // 🟠 Tiempo de crecimiento
-            formData.append("time_growth[Desde_anhos]", 2);  // Puedes agregar inputs en tu HTML para estos
-            formData.append("time_growth[Hasta_anhos]", 4);
-
-            // 🔵 Sabor
-            formData.append("flavor", document.getElementById("sabor").value);
-
-            // 🟡 Región
-            formData.append("region[nombre]", document.getElementById("region").value);
-            formData.append("region[clima]", "Templado"); // Puedes modificar esto si tienes campos
-            formData.append("region[suelo]", "Volcánico"); // igual aquí
-
-            // 🟣 Datos del café
-            formData.append("coffee_data[requerimiento_nutricion]", "Alta"); // Agrega input si quieres
-            formData.append("coffee_data[densidad_plantacion]", "Alta");     // idem
-            formData.append("coffee_data[resistencia]", document.getElementById("resistencia").value);
-            formData.append("coffee_data[primera_siembra]", "2023-01-01"); // Usa un date input si quieres
-
-            // Altitud óptima
-            formData.append("altitud_optima", document.getElementById("altitud_optima").value);
-
-            // Enviar la solicitud
-            fetch('http://localhost:8081/caracteristicas_cafe/post', {
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Basic ' + btoa('Adrian@gmail.com:soylacontra'),
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: formData.toString()
-            })
-            .then(async response => {
-                const data = await response.json();
-                if (!response.ok) throw new Error(data.error || `Error ${response.status}`);
-                return data;
-            })
-            .then(data => {
-                showNotification("Variedad agregada correctamente", "success");
-                setTimeout(() => window.location.reload(), 1500);
-            })
-            .catch(error => {
-                console.error("Error completo:", error);
-                showNotification(`Error: ${error.message}`, "error");
-            });
-
-        });
-    }
-});
+// Código duplicado eliminado - los eventos se manejan en las funciones principales
 
 // Funciones de manejo de formularios
 function handleUserLogin() {
@@ -1081,7 +1022,8 @@ function showNotification(message, type = 'info') {
 // Funciones utilitarias para las imágenes
 function handleImageError(img) {
     img.onerror = null;
-    img.src = 'https://via.placeholder.com/300x200?text=Imagen+no+disponible';
+    // Usar una imagen local o un data URI en lugar de via.placeholder.com
+    img.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlbiBubyBkaXNwb25pYmxlPC90ZXh0Pjwvc3ZnPg==';
     img.alt = 'Imagen no disponible';
 }
 
