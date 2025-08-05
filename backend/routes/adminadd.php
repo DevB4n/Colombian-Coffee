@@ -822,6 +822,573 @@ curl_close($ch);
         });
     </script>
     
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+
+// ===========================================
+// SCRIPT PARA GENERAR PDF DEL CATÁLOGO DE CAFÉ
+// ===========================================
+
+// Función para generar PDF con todas las variedades de café
+function generateCoffeePDF() {
+    // Mostrar mensaje de carga
+    showLoadingMessage();
+    
+    // Obtener todas las tarjetas de café visibles
+    const coffeeCards = document.querySelectorAll('.cafe-card:not([style*="display: none"])');
+    
+    if (coffeeCards.length === 0) {
+        alert('No hay variedades de café para exportar.');
+        hideLoadingMessage();
+        return;
+    }
+
+    // Crear el contenido del PDF
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p', 'mm', 'a4');
+    
+    // Configuración de colores y fuentes
+    const primaryColor = [139, 69, 19]; // Café oscuro
+    const secondaryColor = [210, 105, 30]; // Café claro
+    const goldColor = [255, 215, 0]; // Dorado
+    
+    let yPosition = 20;
+    const pageHeight = 297;
+    const margin = 20;
+    const lineHeight = 6;
+    
+    // Función para agregar nueva página si es necesario
+    function checkNewPage(neededSpace = 50) {
+        if (yPosition + neededSpace > pageHeight - margin) {
+            doc.addPage();
+            yPosition = margin;
+            return true;
+        }
+        return false;
+    }
+    
+    // PORTADA
+    doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+    doc.rect(0, 0, 210, 297, 'F');
+    
+    // Título principal
+    doc.setTextColor(255, 215, 0);
+    doc.setFontSize(28);
+    doc.setFont('helvetica', 'bold');
+    doc.text('☕ CATÁLOGO DE CAFÉ', 105, 100, { align: 'center' });
+    
+    doc.setFontSize(20);
+    doc.text('Variedades Colombianas', 105, 120, { align: 'center' });
+    
+    // Subtítulo
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Descubre las mejores variedades de café colombiano', 105, 140, { align: 'center' });
+    
+    // Fecha de generación
+    const currentDate = new Date().toLocaleDateString('es-CO', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+    doc.setFontSize(12);
+    doc.text(`Generado el: ${currentDate}`, 105, 200, { align: 'center' });
+    
+    // Estadísticas rápidas
+    doc.setTextColor(255, 215, 0);
+    doc.setFontSize(16);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`📊 ${coffeeCards.length} Variedades Incluidas`, 105, 230, { align: 'center' });
+    
+    // Nueva página para el contenido
+    doc.addPage();
+    yPosition = margin;
+    
+    // ÍNDICE
+    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.text('📋 ÍNDICE DE VARIEDADES', margin, yPosition);
+    yPosition += 15;
+    
+    // Listar todas las variedades en el índice
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'normal');
+    
+    coffeeCards.forEach((card, index) => {
+        const varietyName = card.querySelector('.variety-name')?.textContent || 
+                          card.getAttribute('data-name') || 
+                          `Variedad ${index + 1}`;
+        
+        if (checkNewPage(10)) {
+            doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            doc.setFontSize(18);
+            doc.setFont('helvetica', 'bold');
+            doc.text('📋 ÍNDICE DE VARIEDADES (continuación)', margin, yPosition);
+            yPosition += 15;
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'normal');
+        }
+        
+        doc.text(`${index + 1}. ${varietyName}`, margin + 5, yPosition);
+        yPosition += 8;
+    });
+    
+    // Nueva página para las variedades
+    doc.addPage();
+    yPosition = margin;
+    
+    // CONTENIDO DE CADA VARIEDAD
+    coffeeCards.forEach((card, index) => {
+        checkNewPage(80);
+        
+        // Obtener información de la tarjeta
+        const varietyName = card.querySelector('.variety-name')?.textContent || 
+                          card.getAttribute('data-name') || 
+                          `Variedad ${index + 1}`;
+        
+        const quality = card.querySelector('.quality-badge')?.textContent?.trim() || 'N/A';
+        
+        // Título de la variedad
+        doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+        doc.rect(margin, yPosition - 5, 170, 12, 'F');
+        
+        doc.setTextColor(255, 215, 0);
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`${index + 1}. ${varietyName}`, margin + 5, yPosition + 3);
+        
+        // Badge de calidad
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(10);
+        doc.text(`Calidad: ${quality}`, 170, yPosition + 3, { align: 'right' });
+        
+        yPosition += 20;
+        
+        // Información del grano
+        const grainInfo = extractInfoFromCard(card, '.info-section:has(.info-title:contains("Características del Grano"))');
+        if (grainInfo.length > 0) {
+            doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            doc.text('🌾 Características del Grano', margin, yPosition);
+            yPosition += 8;
+            
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0, 0, 0);
+            
+            grainInfo.forEach(info => {
+                if (checkNewPage(15)) {
+                    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+                    doc.setFontSize(16);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text(`${varietyName} (continuación)`, margin, yPosition);
+                    yPosition += 10;
+                    doc.setFontSize(10);
+                    doc.setFont('helvetica', 'normal');
+                    doc.setTextColor(0, 0, 0);
+                }
+                
+                doc.setFont('helvetica', 'bold');
+                doc.text(`• ${info.label}:`, margin + 5, yPosition);
+                doc.setFont('helvetica', 'normal');
+                doc.text(info.value, margin + 40, yPosition);
+                yPosition += 5;
+            });
+            yPosition += 5;
+        }
+        
+        // Información de la planta
+        const plantInfo = extractInfoFromCard(card, '.info-section:has(.info-title:contains("Información de la Planta"))');
+        if (plantInfo.length > 0) {
+            checkNewPage(30);
+            
+            doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            doc.text('🌱 Información de la Planta', margin, yPosition);
+            yPosition += 8;
+            
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0, 0, 0);
+            
+            plantInfo.forEach(info => {
+                if (checkNewPage(10)) {
+                    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+                    doc.setFontSize(16);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text(`${varietyName} (continuación)`, margin, yPosition);
+                    yPosition += 10;
+                    doc.setFontSize(10);
+                    doc.setFont('helvetica', 'normal');
+                    doc.setTextColor(0, 0, 0);
+                }
+                
+                doc.setFont('helvetica', 'bold');
+                doc.text(`• ${info.label}:`, margin + 5, yPosition);
+                doc.setFont('helvetica', 'normal');
+                doc.text(info.value, margin + 40, yPosition);
+                yPosition += 5;
+            });
+        }
+        
+        // Descripción
+        const description = card.querySelector('.description p')?.textContent;
+        if (description) {
+            checkNewPage(20);
+            
+            doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.text('📝 Descripción:', margin, yPosition);
+            yPosition += 6;
+            
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            
+            const cleanDescription = description.replace('Descripción:', '').trim();
+            const lines = doc.splitTextToSize(cleanDescription, 170);
+            
+            lines.forEach(line => {
+                if (checkNewPage(10)) {
+                    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+                    doc.setFontSize(16);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text(`${varietyName} (continuación)`, margin, yPosition);
+                    yPosition += 10;
+                    doc.setTextColor(0, 0, 0);
+                    doc.setFontSize(10);
+                    doc.setFont('helvetica', 'normal');
+                }
+                
+                doc.text(line, margin + 5, yPosition);
+                yPosition += 5;
+            });
+        }
+        
+        // Datos de cultivo
+        const cultivationInfo = extractInfoFromCard(card, '.info-section:has(.info-title:contains("Datos de Cultivo"))');
+        if (cultivationInfo.length > 0) {
+            checkNewPage(35);
+            
+            doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            doc.text('📊 Datos de Cultivo', margin, yPosition);
+            yPosition += 8;
+            
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0, 0, 0);
+            
+            cultivationInfo.forEach(info => {
+                if (checkNewPage(10)) {
+                    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+                    doc.setFontSize(16);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text(`${varietyName} (continuación)`, margin, yPosition);
+                    yPosition += 10;
+                    doc.setFontSize(10);
+                    doc.setFont('helvetica', 'normal');
+                    doc.setTextColor(0, 0, 0);
+                }
+                
+                doc.setFont('helvetica', 'bold');
+                doc.text(`• ${info.label}:`, margin + 5, yPosition);
+                doc.setFont('helvetica', 'normal');
+                doc.text(info.value, margin + 50, yPosition);
+                yPosition += 5;
+            });
+        }
+        
+        // Separador entre variedades
+        yPosition += 10;
+        if (index < coffeeCards.length - 1) {
+            checkNewPage(20);
+            doc.setDrawColor(210, 105, 30);
+            doc.setLineWidth(0.5);
+            doc.line(margin, yPosition, 190, yPosition);
+            yPosition += 15;
+        }
+    });
+    
+    // Página final con información adicional
+    doc.addPage();
+    yPosition = margin;
+    
+    doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+    doc.rect(0, 0, 210, 40, 'F');
+    
+    doc.setTextColor(255, 215, 0);
+    doc.setFontSize(20);
+    doc.setFont('helvetica', 'bold');
+    doc.text('☕ Café de Colombia', 105, 25, { align: 'center' });
+    
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(12);
+    doc.text('Patrimonio Cultural de la Humanidad - UNESCO 2011', 105, 60, { align: 'center' });
+    
+    // Información adicional
+    yPosition = 80;
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('🌍 Datos Interesantes del Café Colombiano', margin, yPosition);
+    yPosition += 15;
+    
+    const facts = [
+        '• Colombia es el tercer productor mundial de café',
+        '• Cultiva principalmente café Arábica de alta calidad',
+        '• 32 departamentos participan en la producción cafetera',
+        '• Más de 540,000 familias dependen del café',
+        '• Se producen aproximadamente 12 millones de sacos anuales',
+        '• El café se cultiva entre 1,200 y 2,000 metros de altitud',
+        '• Colombia tiene dos cosechas al año: principal y mitaca',
+        '• El 80% de los cafetales están bajo sombra'
+    ];
+    
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    
+    facts.forEach(fact => {
+        doc.text(fact, margin, yPosition);
+        yPosition += 8;
+    });
+    
+    yPosition += 20;
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.text(`Documento generado el ${currentDate}`, 105, yPosition, { align: 'center' });
+    doc.text('Total de variedades incluidas: ' + coffeeCards.length, 105, yPosition + 10, { align: 'center' });
+    
+    // Guardar el PDF
+    const fileName = `Catalogo_Cafe_Colombiano_${new Date().toISOString().split('T')[0]}.pdf`;
+    doc.save(fileName);
+    
+    hideLoadingMessage();
+    
+    // Mostrar mensaje de éxito
+    showSuccessMessage(`PDF generado exitosamente: ${fileName}`);
+}
+
+// Función auxiliar para extraer información de las tarjetas
+function extractInfoFromCard(card, selector) {
+    const info = [];
+    
+    // Buscar todas las secciones de información
+    const infoSections = card.querySelectorAll('.info-section');
+    
+    infoSections.forEach(section => {
+        const titleElement = section.querySelector('.info-title');
+        if (!titleElement) return;
+        
+        const title = titleElement.textContent.trim();
+        
+        // Filtrar por el tipo de sección que queremos
+        let shouldInclude = false;
+        if (selector.includes('Grano') && title.includes('Grano')) shouldInclude = true;
+        if (selector.includes('Planta') && title.includes('Planta')) shouldInclude = true;
+        if (selector.includes('Cultivo') && title.includes('Cultivo')) shouldInclude = true;
+        
+        if (shouldInclude) {
+            const infoItems = section.querySelectorAll('.info-item');
+            infoItems.forEach(item => {
+                const label = item.querySelector('.label')?.textContent?.trim() || '';
+                const value = item.querySelector('.value')?.textContent?.trim() || '';
+                
+                if (label && value) {
+                    info.push({ label: label.replace(':', ''), value });
+                }
+            });
+        }
+    });
+    
+    return info;
+}
+
+// Funciones de UI para mensajes
+function showLoadingMessage() {
+    // Crear overlay de carga
+    const overlay = document.createElement('div');
+    overlay.id = 'pdfLoadingOverlay';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+        color: white;
+        font-size: 18px;
+        flex-direction: column;
+    `;
+    
+    overlay.innerHTML = `
+        <div style="text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 20px;">☕</div>
+            <div>Generando PDF del catálogo...</div>
+            <div style="margin-top: 10px; font-size: 14px; opacity: 0.8;">Esto puede tomar unos segundos</div>
+        </div>
+    `;
+    
+    document.body.appendChild(overlay);
+}
+
+function hideLoadingMessage() {
+    const overlay = document.getElementById('pdfLoadingOverlay');
+    if (overlay) {
+        overlay.remove();
+    }
+}
+
+function showSuccessMessage(message) {
+    const successDiv = document.createElement('div');
+    successDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(45deg, #4CAF50, #45a049);
+        color: white;
+        padding: 15px 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        z-index: 10001;
+        font-size: 14px;
+        max-width: 300px;
+    `;
+    
+    successDiv.innerHTML = `
+        <div style="display: flex; align-items: center;">
+            <span style="font-size: 20px; margin-right: 10px;">✅</span>
+            <div>${message}</div>
+        </div>
+    `;
+    
+    document.body.appendChild(successDiv);
+    
+    setTimeout(() => {
+        successDiv.remove();
+    }, 5000);
+}
+
+// Función para agregar el botón de descarga a la página
+function addDownloadButton() {
+    // Buscar el contenedor donde agregar el botón
+    const catalogHeader = document.querySelector('.catalog-header') || 
+                         document.querySelector('.catalog-title-section');
+    
+    if (!catalogHeader) {
+        console.error('No se encontró el contenedor para el botón de descarga');
+        return;
+    }
+    
+    // Crear el botón
+    const downloadBtn = document.createElement('button');
+    downloadBtn.id = 'btnDownloadPDF';
+    downloadBtn.className = 'btn-download-pdf';
+    downloadBtn.innerHTML = '📄 Descargar Catálogo PDF';
+    
+    // Estilos para el botón
+    downloadBtn.style.cssText = `
+        background: linear-gradient(45deg, #8B4513, #D2691E);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 1rem;
+        margin: 10px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        font-weight: bold;
+    `;
+    
+    // Efectos hover
+    downloadBtn.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-2px)';
+        this.style.boxShadow = '0 6px 20px rgba(0,0,0,0.3)';
+    });
+    
+    downloadBtn.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+        this.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
+    });
+    
+    // Agregar event listener
+    downloadBtn.addEventListener('click', generateCoffeePDF);
+    
+    // Insertar el botón
+    catalogHeader.appendChild(downloadBtn);
+}
+
+// Función para cargar la librería jsPDF
+function loadJsPDF() {
+    return new Promise((resolve, reject) => {
+        if (window.jspdf) {
+            resolve();
+            return;
+        }
+        
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+        script.onload = () => {
+            if (window.jspdf) {
+                resolve();
+            } else {
+                reject(new Error('jsPDF no se cargó correctamente'));
+            }
+        };
+        script.onerror = () => reject(new Error('Error al cargar jsPDF'));
+        document.head.appendChild(script);
+    });
+}
+
+// Inicialización
+async function initializePDFFeature() {
+    try {
+        await loadJsPDF();
+        addDownloadButton();
+        console.log('Funcionalidad PDF inicializada correctamente');
+    } catch (error) {
+        console.error('Error al inicializar la funcionalidad PDF:', error);
+        
+        // Mostrar mensaje de error al usuario
+        const errorDiv = document.createElement('div');
+        errorDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #f44336;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            z-index: 10000;
+        `;
+        errorDiv.textContent = 'Error al cargar la funcionalidad de PDF';
+        document.body.appendChild(errorDiv);
+        
+        setTimeout(() => errorDiv.remove(), 5000);
+    }
+}
+
+// Auto-inicialización cuando el DOM esté listo
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializePDFFeature);
+} else {
+    initializePDFFeature();
+}
+
+</script>
+
+
     <script src="../../frontend/js/pagina_admi.js"></script>
 </body>
 </html>
