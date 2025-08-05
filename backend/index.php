@@ -30,19 +30,7 @@ $container->set(ResponseFactoryInterface::class, $app->getResponseFactory());
 $errorHanlder = $app->addErrorMiddleware(true, true, true);
 $errorHanlder->setDefaultErrorHandler($container->get(ErrorHandlerInterface::class));
 
-// Ejecutando los scripts de
-
-// public/
-(require_once 'public/index.php')($app);
-
-// routes/
-(require_once 'routes/coffees.php')($app);
-
-$app->options('/{routes:.+}', function ($request, $response) {
-    return $response;
-});
-
-// Middleware CORS
+// Middleware CORS - debe ir ANTES de las rutas
 $app->add(function ($request, $handler) {
     $response = $handler->handle($request);
 
@@ -51,5 +39,17 @@ $app->add(function ($request, $handler) {
         ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
         ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
 });
+
+$app->options('/{routes:.+}', function ($request, $response) {
+    return $response;
+});
+
+// Ejecutando los scripts de
+
+// public/
+(require_once 'public/index.php')($app);
+
+// routes/
+(require_once 'routes/coffees.php')($app);
 
 $app->run();

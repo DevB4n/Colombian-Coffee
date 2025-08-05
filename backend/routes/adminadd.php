@@ -28,6 +28,7 @@ curl_close($ch);
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,20 +37,23 @@ curl_close($ch);
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
+
 <body>
     <div class="container">
         <video id="videoBackground" muted loop autoplay>
-            <source src="img/Comerciales Colcafé - Consiéntete, date gusto con un Colcafé Clásico.mp4" type="video/mp4">
+            <source src="../../frontend/img/Comerciales Colcafé - Consiéntete, date gusto con un Colcafé Clásico.mp4" type="video/mp4">
+            <source src="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4" type="video/mp4">
+            Tu navegador no soporta el elemento de video.
         </video>
-        
+
         <div class="overlay" id="overlay">
             <div class="header">
                 <h1>☕ Catálogo de Café</h1>
                 <p>Descubre las mejores variedades de café colombiano</p>
             </div>
-            
+
             <button class="btn-enter" id="btnEnter">ENTRAR</button>
-            
+
             <div class="login-options" id="loginOptions">
                 <button class="login-btn" id="userLogin">Ingresar como Usuario</button>
                 <button class="login-btn" id="adminLogin">Ingresar como Administrador</button>
@@ -94,7 +98,7 @@ curl_close($ch);
                         <div class="stat-label">Metros de Altitud</div>
                     </div>
                 </div>
-                
+
                 <div class="coffee-map-section" style="margin-bottom: 40px;">
                     <h4 class="map-title" style="color: #FFD700; text-align: center; font-size: 1.8rem; margin-bottom: 20px;">
                         📍 Regiones donde se cultiva nuestro café
@@ -201,27 +205,27 @@ curl_close($ch);
                     <button class="btn-update" id="btnOpenUpdateModal">✏️ Actualizar Registro</button>
                     <button class="btn-delete" id="btnOpenDeleteModal">🗑️ Eliminar Variedad</button>
                 </div>
-                
+
                 <!-- Sección de búsqueda y filtros -->
                 <div class="search-filter-section" style="max-width: 1200px; margin: 0 auto 40px; padding: 20px;">
                     <div class="search-filter-container" style="background: linear-gradient(135deg, rgba(139, 69, 19, 0.9), rgba(210, 105, 30, 0.9)); border-radius: 20px; padding: 30px; backdrop-filter: blur(10px); border: 2px solid rgba(255, 215, 0, 0.3);">
-                        
+
                         <!-- Título de la sección -->
                         <h3 style="color: #FFD700; text-align: center; font-size: 1.8rem; margin-bottom: 25px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
                             🔎 Buscar y Filtrar Variedades
                         </h3>
-                        
+
                         <!-- Buscador principal -->
                         <div class="search-main" style="margin-bottom: 25px; text-align: center;">
-                            <input type="text" 
-                                   id="searchInput" 
-                                   placeholder="Buscar por nombre de variedad (ej. Castillo, Caturra) 🔍" 
-                                   style="padding: 15px 25px; border-radius: 25px; border: 2px solid #FFD700; font-size: 1.1rem; width: 90%; max-width: 600px; background: rgba(255, 255, 255, 0.95); box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                            <input type="text"
+                                id="searchInput"
+                                placeholder="Buscar por nombre de variedad (ej. Castillo, Caturra) 🔍"
+                                style="padding: 15px 25px; border-radius: 25px; border: 2px solid #FFD700; font-size: 1.1rem; width: 90%; max-width: 600px; background: rgba(255, 255, 255, 0.95); box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
                         </div>
-                        
+
                         <!-- Filtros por características -->
                         <div class="filters-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 20px;">
-                            
+
                             <!-- Filtro por Calidad -->
                             <div class="filter-group">
                                 <label style="color: #FFD700; font-weight: bold; display: block; margin-bottom: 8px; font-size: 1rem;">
@@ -234,7 +238,7 @@ curl_close($ch);
                                     <option value="excelente">Excelente</option>
                                 </select>
                             </div>
-                            
+
                             <!-- Filtro por Región -->
                             <div class="filter-group">
                                 <label style="color: #FFD700; font-weight: bold; display: block; margin-bottom: 8px; font-size: 1rem;">
@@ -251,7 +255,7 @@ curl_close($ch);
                                     <option value="tolima">Tolima</option>
                                 </select>
                             </div>
-                            
+
                             <!-- Filtro por Color del Grano -->
                             <div class="filter-group">
                                 <label style="color: #FFD700; font-weight: bold; display: block; margin-bottom: 8px; font-size: 1rem;">
@@ -265,7 +269,7 @@ curl_close($ch);
                                     <option value="rojizo">Rojizo</option>
                                 </select>
                             </div>
-                            
+
                             <!-- Filtro por Tamaño del Grano -->
                             <div class="filter-group">
                                 <label style="color: #FFD700; font-weight: bold; display: block; margin-bottom: 8px; font-size: 1rem;">
@@ -278,7 +282,7 @@ curl_close($ch);
                                     <option value="grande">Grande (> 7mm)</option>
                                 </select>
                             </div>
-                            
+
                             <!-- Filtro por Resistencia -->
                             <div class="filter-group">
                                 <label style="color: #FFD700; font-weight: bold; display: block; margin-bottom: 8px; font-size: 1rem;">
@@ -294,7 +298,7 @@ curl_close($ch);
                                     <option value="baja">Baja Resistencia</option>
                                 </select>
                             </div>
-                            
+
                             <!-- Filtro por Altitud -->
                             <div class="filter-group">
                                 <label style="color: #FFD700; font-weight: bold; display: block; margin-bottom: 8px; font-size: 1rem;">
@@ -308,21 +312,21 @@ curl_close($ch);
                                 </select>
                             </div>
                         </div>
-                        
+
                         <!-- Botones de acción -->
                         <div class="filter-actions" style="text-align: center; margin-top: 20px;">
-                            <button id="clearFilters" 
-                                    style="background: linear-gradient(45deg, #6B4423, #8B4513); color: white; border: none; padding: 12px 25px; border-radius: 20px; cursor: pointer; font-size: 1rem; margin: 0 10px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                            <button id="clearFilters"
+                                style="background: linear-gradient(45deg, #6B4423, #8B4513); color: white; border: none; padding: 12px 25px; border-radius: 20px; cursor: pointer; font-size: 1rem; margin: 0 10px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
                                 🔄 Limpiar Filtros
                             </button>
-                            <span id="resultsCount" 
-                                  style="color: #FFD700; font-weight: bold; font-size: 1.1rem; margin-left: 20px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                            <span id="resultsCount"
+                                style="color: #FFD700; font-weight: bold; font-size: 1.1rem; margin-left: 20px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
                                 Mostrando todas las variedades
                             </span>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="cafe-grid">
                     <?php if (!empty($variedades) && is_array($variedades)): ?>
                         <?php foreach ($variedades as $cafe): ?>
@@ -330,10 +334,10 @@ curl_close($ch);
                                 <div class="cafe-card" data-name="<?php echo htmlspecialchars($cafe['grano']['planta']['nombre_variedad']); ?>">
                                     <!-- Imagen del grano -->
                                     <div class="image-container">
-                                        <img src="<?php echo htmlspecialchars($cafe['grano']['imagen_url'] ?? 'https://via.placeholder.com/300x200?text=Imagen+no+disponible'); ?>" 
-                                             alt="Grano <?php echo htmlspecialchars($cafe['grano']['planta']['nombre_variedad']); ?>" 
-                                             class="cafe-image"
-                                             onerror="this.src='https://via.placeholder.com/300x200?text=Imagen+no+disponible'">
+                                        <img src="<?php echo htmlspecialchars($cafe['grano']['imagen_url'] ?? 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlbiBubyBkaXNwb25pYmxlPC90ZXh0Pjwvc3ZnPg=='); ?>"
+                                            alt="Grano <?php echo htmlspecialchars($cafe['grano']['planta']['nombre_variedad']); ?>"
+                                            class="cafe-image"
+                                            onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlbiBubyBkaXNwb25pYmxlPC90ZXh0Pjwvc3ZnPg=='">
                                         <div class="image-overlay">
                                             <span class="variety-name"><?php echo htmlspecialchars($cafe['grano']['planta']['nombre_variedad']); ?></span>
                                         </div>
@@ -372,10 +376,10 @@ curl_close($ch);
 
                                         <!-- Imagen de la Planta -->
                                         <div class="plant-image-container">
-                                            <img src="<?php echo htmlspecialchars($cafe['grano']['planta']['imagen_url'] ?? 'https://via.placeholder.com/300x180?text=Planta+no+disponible'); ?>" 
-                                                 alt="Planta <?php echo htmlspecialchars($cafe['grano']['planta']['nombre_variedad']); ?>" 
-                                                 class="planta-image"
-                                                 onerror="this.src='https://via.placeholder.com/300x180?text=Planta+no+disponible'">
+                                            <img src="<?php echo htmlspecialchars($cafe['grano']['planta']['imagen_url'] ?? 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjE4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPlBsYW50YSBubyBkaXNwb25pYmxlPC90ZXh0Pjwvc3ZnPg=='); ?>"
+                                                alt="Planta <?php echo htmlspecialchars($cafe['grano']['planta']['nombre_variedad']); ?>"
+                                                class="planta-image"
+                                                onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjE4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPlBsYW50YSBubyBkaXNwb25pYmxlPC90ZXh0Pjwvc3ZnPg=='">
                                         </div>
 
                                         <!-- Información de la Planta -->
@@ -427,17 +431,17 @@ curl_close($ch);
                                                 <div class="info-item">
                                                     <span class="label">Crecimiento:</span>
                                                     <span class="value">
-                                                        <?php 
+                                                        <?php
                                                         $desde = $cafe['tiempo_crecimiento']['Desde_anhos'] ?? 'N/A';
                                                         $hasta = $cafe['tiempo_crecimiento']['Hasta_anhos'] ?? 'N/A';
-                                                        echo htmlspecialchars($desde . ' - ' . $hasta); 
+                                                        echo htmlspecialchars($desde . ' - ' . $hasta);
                                                         ?> años
                                                     </span>
                                                 </div>
                                                 <div class="info-item">
                                                     <span class="label">Primera siembra:</span>
                                                     <span class="value">
-                                                        <?php 
+                                                        <?php
                                                         if (isset($cafe['datos_cafe']['primera_siembra'])) {
                                                             echo date('d/m/Y', strtotime($cafe['datos_cafe']['primera_siembra']));
                                                         } else {
@@ -483,7 +487,7 @@ curl_close($ch);
                 </div>
             </div>
         </div>
-        
+
         <!-- Modales originales del login -->
         <div class="modal" id="userModal">
             <div class="modal-content">
@@ -503,7 +507,7 @@ curl_close($ch);
                 </form>
             </div>
         </div>
-        
+
         <div class="modal" id="adminModal">
             <div class="modal-content">
                 <span class="close-btn" id="closeAdminModal">&times;</span>
@@ -521,7 +525,7 @@ curl_close($ch);
                 </form>
             </div>
         </div>
-        
+
         <!-- Modal para agregar nuevo producto -->
         <div class="modal" id="addProductModal">
             <div class="modal-content">
@@ -556,7 +560,7 @@ curl_close($ch);
                             <input type="url" id="imagen_planta_url" required>
                         </div>
                     </div>
-                            
+
                     <!-- Información del Grano -->
                     <div class="form-section">
                         <h3>🌾 Características del Grano</h3>
@@ -576,9 +580,10 @@ curl_close($ch);
                             <label for="calidad">Calidad:</label>
                             <select id="calidad" required>
                                 <option value="">Selecciona la calidad</option>
-                                <option value="Excelente">Excelente</option>
                                 <option value="Bueno">Bueno</option>
                                 <option value="Regular">Regular</option>
+                                <option value="Malo">Malo</option>
+                                <option value="No Consumible">No Consumible</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -586,7 +591,7 @@ curl_close($ch);
                             <input type="url" id="imagen_url" required>
                         </div>
                     </div>
-                    
+
                     <!-- Información Adicional -->
                     <div class="form-section">
                         <h3>📊 Información Adicional</h3>
@@ -595,16 +600,14 @@ curl_close($ch);
                             <select id="region" required>
                                 <option value="">Selecciona la región</option>
                                 <option value="Huila">Huila</option>
-                                <option value="Nariño">Nariño</option>
+                                <option value="Narino">Narino</option>
                                 <option value="Antioquia">Antioquia</option>
-                                <option value="Eje Cafetero">Eje Cafetero</option>
-                                <option value="Santander">Santander</option>
-                                <option value="Cauca">Cauca</option>
-                                <option value="Tolima">Tolima</option>
-                                <option value="Valle del Cauca">Valle del Cauca</option>
                                 <option value="Caldas">Caldas</option>
-                                <option value="Quindío">Quindío</option>
-                                <option value="Risaralda">Risaralda</option>
+                                <option value="Tolima">Tolima</option>
+                                <option value="Cauca">Cauca</option>
+                                <option value="Santander">Santander</option>
+                                <option value="Valle del Cauca">Valle del Cauca</option>
+                                <option value="Quindio">Quindío</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -619,12 +622,10 @@ curl_close($ch);
                             <label for="resistencia">Resistencia:</label>
                             <select id="resistencia" required>
                                 <option value="">Selecciona el tipo de resistencia</option>
-                                <option value="Resistente a Roya">Resistente a Roya</option>
-                                <option value="Resistente a Plagas">Resistente a Plagas</option>
-                                <option value="Resistente a Sequía">Resistente a Sequía</option>
-                                <option value="Alta Resistencia">Alta Resistencia</option>
-                                <option value="Media Resistencia">Media Resistencia</option>
-                                <option value="Baja Resistencia">Baja Resistencia</option>
+                                <option value="Resistente">Resistente</option>
+                                <option value="Tolerante">Tolerante</option>
+                                <option value="Susceptible">Susceptible</option>
+                                <option value="En peligro">En peligro</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -638,6 +639,7 @@ curl_close($ch);
                                 <option value="Alto">Alto</option>
                                 <option value="Medio">Medio</option>
                                 <option value="Bajo">Bajo</option>
+                                <option value="Exigente">Exigente</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -649,11 +651,11 @@ curl_close($ch);
                             <input type="number" id="hasta_anhos" min="2" max="15" value="5" required>
                         </div>
                     </div>
-                    
+
                     <button type="submit" class="submit-btn">Agregar Variedad</button>
-                    </form>
-                </div>
+                </form>
             </div>
+        </div>
 
         <!-- Modal para actualizar producto -->
         <div class="modal" id="updateProductModal">
@@ -724,7 +726,7 @@ curl_close($ch);
                 </form>
             </div>
         </div>
-        
+
         <div class="modal" id="registerModal">
             <div class="modal-content">
                 <span class="close-btn" id="closeRegisterModal">&times;</span>
@@ -771,8 +773,7 @@ curl_close($ch);
                 });
 
                 // Zonas cafeteras
-                const zonasCafeteras = [
-                    {
+                const zonasCafeteras = [{
                         nombre: "Huila",
                         tipoCafe: "Café suave y balanceado",
                         coords: [2.5359, -75.5277]
@@ -806,7 +807,9 @@ curl_close($ch);
 
                 // Agregar cada marcador con emoji
                 zonasCafeteras.forEach(zona => {
-                    L.marker(zona.coords, { icon: iconEmoji("📍") })
+                    L.marker(zona.coords, {
+                            icon: iconEmoji("📍")
+                        })
                         .addTo(map)
                         .bindPopup(`<strong>${zona.nombre}</strong><br>${zona.tipoCafe}`);
                 });
@@ -821,7 +824,8 @@ curl_close($ch);
             setTimeout(initializeMap, 100);
         });
     </script>
-    
+
     <script src="../../frontend/js/pagina_admi.js"></script>
 </body>
+
 </html>
