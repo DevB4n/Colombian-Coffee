@@ -87,7 +87,7 @@ body {
     background: linear-gradient(45deg, #A0522D, #FF8C00);
 }
 
-.btn-back {
+.btn-logout {
     background: linear-gradient(45deg, #6B4423, #8B4513);
     color: white;
     border: none;
@@ -99,7 +99,7 @@ body {
     margin-bottom: 20px;
 }
 
-.btn-back:hover {
+.btn-logout:hover {
     background: linear-gradient(45deg, #8B4513, #A0522D);
     transform: translateY(-1px);
 }
