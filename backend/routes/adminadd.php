@@ -1326,15 +1326,6 @@ if (document.readyState === 'loading') {
     initializePDFFeature();
 }
 
-<<<<<<< HEAD
-</script>
-
-
-<script src="../../frontend/js/pagina_principal.js"></script>
-</body>
-</html>
-=======
->>>>>>> 67799e12f3dbed413da2f1a94e799c1cedf5692a
     </script>
     
     <script src="../../frontend/js/pagina_principal.js"></script>
@@ -1344,8 +1335,4 @@ if (document.readyState === 'loading') {
     
     <script src="../../frontend/js/pagina_principal.js"></script>
 </body>
-<<<<<<< HEAD
-=======
-
->>>>>>> 67799e12f3dbed413da2f1a94e799c1cedf5692a
 </html>
