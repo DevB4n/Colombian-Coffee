@@ -1327,12 +1327,8 @@ if (document.readyState === 'loading') {
 }
 
     </script>
-    
-    <script src="../../frontend/js/pagina_principal.js"></script>
+
+    <script src="../../frontend/js/pagina_admi.js"></script>
 </body>
-</html>
-    </script>
-    
-    <script src="../../frontend/js/pagina_principal.js"></script>
-</body>
+
 </html>
