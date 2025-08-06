@@ -468,61 +468,302 @@ curl_close($ch);
                 </div>
             </div>
         </div>
+
+        <!-- Modal para agregar nuevo producto -->
+        <div class="modal" id="addProductModal">
+            <div class="modal-content">
+                <span class="close-btn" id="closeAddProductModal">&times;</span>
+                <h2>➕ Agregar Nueva Variedad de Café</h2>
+                <form id="addProductForm">
+                    <!-- Información de la Planta -->
+                    <div class="form-section">
+                        <h3>🌱 Información de la Planta</h3>
+                        <div class="form-group">
+                            <label for="nombre_variedad">Nombre de la Variedad:</label>
+                            <input type="text" id="nombre_variedad" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="especie">Especie:</label>
+                            <input type="text" id="especie" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tamano_planta_cm">Tamaño de la Planta (cm):</label>
+                            <input type="number" id="tamano_planta_cm" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="color_hoja">Color de la Hoja:</label>
+                            <input type="text" id="color_hoja" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="descripcion_planta">Descripción:</label>
+                            <textarea id="descripcion_planta" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="imagen_planta_url">URL de la Imagen de la Planta:</label>
+                            <input type="url" id="imagen_planta_url" required>
+                        </div>
+                    </div>
+
+                    <!-- Información del Grano -->
+                    <div class="form-section">
+                        <h3>🌾 Características del Grano</h3>
+                        <div class="form-group">
+                            <label for="tamano_grano_mm">Tamaño del Grano (mm):</label>
+                            <input type="number" step="0.1" id="tamano_grano_mm" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="color_grano">Color del Grano:</label>
+                            <input type="text" id="color_grano" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="forma_grano">Forma del Grano:</label>
+                            <input type="text" id="forma_grano" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="calidad">Calidad:</label>
+                            <select id="calidad" required>
+                                <option value="">Selecciona la calidad</option>
+                                <option value="Bueno">Bueno</option>
+                                <option value="Regular">Regular</option>
+                                <option value="Malo">Malo</option>
+                                <option value="No Consumible">No Consumible</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="imagen_url">URL de la Imagen del Grano:</label>
+                            <input type="url" id="imagen_url" required>
+                        </div>
+                    </div>
+
+                    <!-- Información Adicional -->
+                    <div class="form-section">
+                        <h3>📊 Información Adicional</h3>
+                        <div class="form-group">
+                            <label for="region">Región:</label>
+                            <select id="region" required>
+                                <option value="">Selecciona la región</option>
+                                <option value="Huila">Huila</option>
+                                <option value="Narino">Narino</option>
+                                <option value="Antioquia">Antioquia</option>
+                                <option value="Caldas">Caldas</option>
+                                <option value="Tolima">Tolima</option>
+                                <option value="Cauca">Cauca</option>
+                                <option value="Santander">Santander</option>
+                                <option value="Valle del Cauca">Valle del Cauca</option>
+                                <option value="Quindio">Quindío</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sabor">Sabor:</label>
+                            <input type="text" id="sabor" placeholder="Ej: Dulce con notas achocolatadas" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="altitud_optima">Altitud Óptima (msnm):</label>
+                            <input type="number" id="altitud_optima" min="500" max="2500" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="resistencia">Resistencia:</label>
+                            <select id="resistencia" required>
+                                <option value="">Selecciona el tipo de resistencia</option>
+                                <option value="Resistente">Resistente</option>
+                                <option value="Tolerante">Tolerante</option>
+                                <option value="Susceptible">Susceptible</option>
+                                <option value="En peligro">En peligro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="densidad_plantacion">Densidad de Plantación (plantas/ha):</label>
+                            <input type="number" id="densidad_plantacion" min="1000" max="10000" value="5000" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="requerimiento_nutricion">Requerimiento de Nutrición:</label>
+                            <select id="requerimiento_nutricion" required>
+                                <option value="">Selecciona el requerimiento</option>
+                                <option value="Alto">Alto</option>
+                                <option value="Medio">Medio</option>
+                                <option value="Bajo">Bajo</option>
+                                <option value="Exigente">Exigente</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="desde_anhos">Tiempo de Crecimiento - Desde (años):</label>
+                            <input type="number" id="desde_anhos" min="1" max="10" value="2" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="hasta_anhos">Tiempo de Crecimiento - Hasta (años):</label>
+                            <input type="number" id="hasta_anhos" min="2" max="15" value="5" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Agregar Variedad</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal para actualizar producto -->
+        <div class="modal" id="updateProductModal">
+            <div class="modal-content">
+                <span class="close-btn" id="closeUpdateProductModal">&times;</span>
+                <h2>✏️ Actualizar Registro</h2>
+                <form id="updateProductForm">
+                    <div class="form-group">
+                        <label for="update_table">Tabla a actualizar:</label>
+                        <select id="update_table" required>
+                            <option value="">Seleccione una tabla</option>
+                            <option value="planta">Planta</option>
+                            <option value="grano">Grano</option>
+                            <option value="region">Región</option>
+                            <option value="sabor">Sabor</option>
+                            <option value="tiempo_crecimiento">Tiempo de Crecimiento</option>
+                            <option value="datos_cafe">Datos del Café</option>
+                            <option value="cafe">Café (completo)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="update_id">ID del registro:</label>
+                        <input type="number" id="update_id" placeholder="Ingrese el ID" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="update_field">Campo a modificar:</label>
+                        <input type="text" id="update_field" placeholder="Ej: nombre_variedad" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="update_value">Nuevo valor:</label>
+                        <input type="text" id="update_value" placeholder="Nuevo valor" required>
+                    </div>
+
+                    <button type="submit" class="btn-update">✏️ Actualizar</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal para eliminar producto -->
+        <div class="modal" id="deleteProductModal">
+            <div class="modal-content">
+                <span class="close-btn" id="closeDeleteProductModal">&times;</span>
+                <h2>🗑️ Eliminar Variedad de Café</h2>
+                <form id="deleteProductForm">
+                    <div class="form-group">
+                        <label for="delete_table">Tabla a eliminar:</label>
+                        <select id="delete_table" required>
+                            <option value="">Seleccione una tabla</option>
+                            <option value="planta">Planta</option>
+                            <option value="grano">Grano</option>
+                            <option value="region">Región</option>
+                            <option value="sabor">Sabor</option>
+                            <option value="tiempo_crecimiento">Tiempo de Crecimiento</option>
+                            <option value="datos_cafe">Datos del Café</option>
+                            <option value="cafe">Café (completo)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="delete_id">ID del registro:</label>
+                        <input type="number" id="delete_id" placeholder="Ingrese el ID" required>
+                    </div>
+
+                    <button type="submit" class="btn-delete">✖️ Eliminar</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="modal" id="registerModal">
+            <div class="modal-content">
+                <span class="close-btn" id="closeRegisterModal">&times;</span>
+                <h2>Registro de Usuario</h2>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="newUsername">Usuario:</label>
+                        <input type="text" id="newUsername" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico:</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">Contraseña:</label>
+                        <input type="password" id="newPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirmar Contraseña:</label>
+                        <input type="password" id="confirmPassword" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Registrarse</button>
+                </form>
+            </div>
+        </div>
     </div>
-    
+
+    <!-- Scripts -->
     <script>
-        const map = L.map('map').setView([4.5, -74.2], 6); // Centro de Colombia
+        // Inicialización del mapa
+        function initializeMap() {
+            try {
+                const map = L.map('map').setView([4.5, -74.2], 6); // Centro de Colombia
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap contributors'
+                }).addTo(map);
 
-        // Definir el emoji como ícono HTML
-        const iconEmoji = (emoji = "📍") => L.divIcon({
-            html: `<div style="font-size: 1.8rem;">${emoji}</div>`,
-            className: '',
-            iconSize: [24, 24]
-        });
+                // Definir el emoji como ícono HTML
+                const iconEmoji = (emoji = "📍") => L.divIcon({
+                    html: `<div style="font-size: 1.8rem;">${emoji}</div>`,
+                    className: '',
+                    iconSize: [24, 24]
+                });
 
-        // Zonas cafeteras
-        const zonasCafeteras = [
-            {
-                nombre: "Huila",
-                tipoCafe: "Café suave y balanceado",
-                coords: [2.5359, -75.5277]
-            },
-            {
-                nombre: "Nariño",
-                tipoCafe: "Notas cítricas y dulces",
-                coords: [1.2891, -77.3579]
-            },
-            {
-                nombre: "Antioquia",
-                tipoCafe: "Cuerpo medio, notas a chocolate",
-                coords: [6.2518, -75.5636]
-            },
-            {
-                nombre: "Santander",
-                tipoCafe: "Aroma intenso, acidez media",
-                coords: [7.1254, -73.1198]
-            },
-            {
-                nombre: "Cauca",
-                tipoCafe: "Dulce, floral y frutal",
-                coords: [2.4448, -76.6147]
-            },
-            {
-                nombre: "Tolima",
-                tipoCafe: "Acidez media y buen cuerpo",
-                coords: [4.4389, -75.2322]
+                // Zonas cafeteras
+                const zonasCafeteras = [
+                    {
+                        nombre: "Huila",
+                        tipoCafe: "Café suave y balanceado",
+                        coords: [2.5359, -75.5277]
+                    },
+                    {
+                        nombre: "Nariño",
+                        tipoCafe: "Notas cítricas y dulces",
+                        coords: [1.2891, -77.3579]
+                    },
+                    {
+                        nombre: "Antioquia",
+                        tipoCafe: "Cuerpo medio, notas a chocolate",
+                        coords: [6.2518, -75.5636]
+                    },
+                    {
+                        nombre: "Santander",
+                        tipoCafe: "Aroma intenso, acidez media",
+                        coords: [7.1254, -73.1198]
+                    },
+                    {
+                        nombre: "Cauca",
+                        tipoCafe: "Dulce, floral y frutal",
+                        coords: [2.4448, -76.6147]
+                    },
+                    {
+                        nombre: "Tolima",
+                        tipoCafe: "Acidez media y buen cuerpo",
+                        coords: [4.4389, -75.2322]
+                    }
+                ];
+
+                // Agregar cada marcador con emoji
+                zonasCafeteras.forEach(zona => {
+                    L.marker(zona.coords, { icon: iconEmoji("📍") })
+                        .addTo(map)
+                        .bindPopup(`<strong>${zona.nombre}</strong><br>${zona.tipoCafe}`);
+                });
+            } catch (error) {
+                console.error('Error inicializando el mapa:', error);
             }
-        ];
+        }
 
-        // Agregar cada marcador con emoji
-        zonasCafeteras.forEach(zona => {
-            L.marker(zona.coords, { icon: iconEmoji("📍") })
-                .addTo(map)
-                .bindPopup(`<strong>${zona.nombre}</strong><br>${zona.tipoCafe}`);
+        // Inicializar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar el mapa después de un pequeño delay
+            setTimeout(initializeMap, 100);
         });
 
 // ===========================================
@@ -1085,12 +1326,15 @@ if (document.readyState === 'loading') {
     initializePDFFeature();
 }
 
+<<<<<<< HEAD
 </script>
 
 
 <script src="../../frontend/js/pagina_principal.js"></script>
 </body>
 </html>
+=======
+>>>>>>> 67799e12f3dbed413da2f1a94e799c1cedf5692a
     </script>
     
     <script src="../../frontend/js/pagina_principal.js"></script>
@@ -1100,4 +1344,8 @@ if (document.readyState === 'loading') {
     
     <script src="../../frontend/js/pagina_principal.js"></script>
 </body>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 67799e12f3dbed413da2f1a94e799c1cedf5692a
 </html>
