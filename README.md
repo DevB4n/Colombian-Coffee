@@ -12,7 +12,6 @@ Proyecto web desarrollado en PHP usando el microframework **Slim**. Esta aplicac
 - 🌐 Frontend con HTML, CSS y JavaScript.
 - 🧪 Middleware global para verificar sesiones activas.
 - 🧰 Consumo de la API mediante cURL.
-- 💾 Uso de `localStorage` para configuración temporal del usuario.
 
 ---
 
@@ -46,7 +45,6 @@ Colombian-Coffee/
 
 - PHP 8.1 o superior
 - Composer
-- Servidor local (XAMPP, Laragon, Apache)
 - Extensión `curl` habilitada
 
 ---
@@ -54,10 +52,6 @@ Colombian-Coffee/
 ## 🧪 Instalación
 
 1. **Clona el repositorio:**
-   ```bash
-   git clone https://github.com/tuusuario/COLOMBIAN-COFFEE.git
-   cd COLOMBIAN-COFFEE/backend
-   ```
 
 2. **Instala las dependencias con Composer:**
    ```bash
@@ -68,7 +62,8 @@ Colombian-Coffee/
 
 4. **Inicia el servidor** (opcional para pruebas locales):
    ```bash
-   php -S localhost:8000 -t public
+   php -S localhost:8081 en backend
+   php -S localhost:8082/backend/routes/index.php
    ```
 
 5. **Abre el frontend** desde tu navegador o desde un servidor local.
@@ -77,7 +72,7 @@ Colombian-Coffee/
 
 ## 🔐 Autenticación
 
-El sistema de login está enrutado mediante `routes/auth.php` y validado en `middleware/AuthMiddleware.php`. Las contraseñas están cifradas con `password_hash()` (bcrypt) y validadas con `password_verify()`.
+El sistema de login está enrutado mediante `routes/auth.php` y validado en `middleware/AuthMiddleware.php`. 
 
 ---
 
@@ -92,7 +87,6 @@ El archivo `coneccion.php` usa cURL para consultar la API de variedades de café
 - Slim Framework
 - Composer
 - vlucas/phpdotenv (opcional para manejar variables de entorno)
-- Firebase JWT (si usas tokens)
 
 ---
 
@@ -100,7 +94,6 @@ El archivo `coneccion.php` usa cURL para consultar la API de variedades de café
 
 - Registro de nuevos usuarios
 - Panel de administración para cafés
-- Paginación y filtros por región, sabor, etc.
 - Carrito de compras (simulado)
 - Internacionalización (i18n)
 
@@ -108,7 +101,7 @@ El archivo `coneccion.php` usa cURL para consultar la API de variedades de café
 
 ## 🧑‍💻 Autor
 
-**Desarrollado por Esteban Chacón**  
+**Desarrollado por Esteban Chacón, Juan David y Yarith Meliza**  
 🔗 Proyecto académico - Campuslands  
 📅 Año: 2025
 
